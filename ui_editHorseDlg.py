@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'C:\Users\Mike_2\Eclipse workspace\Betty\src\editHorseDlg.ui'
 #
-# Created: Mon Feb 01 01:42:22 2010
+# Created: Mon Feb 01 02:21:56 2010
 #      by: PyQt4 UI code generator 4.7
 #
 # WARNING! All changes made in this file will be lost!
@@ -53,9 +53,9 @@ class Ui_editHorseDlg(object):
         self.groupBox.setObjectName("groupBox")
         self.verticalLayout_2 = QtGui.QVBoxLayout(self.groupBox)
         self.verticalLayout_2.setObjectName("verticalLayout_2")
-        self.gridLayout = QtGui.QGridLayout()
-        self.gridLayout.setObjectName("gridLayout")
-        self.verticalLayout_2.addLayout(self.gridLayout)
+        self.adjustGridLayout = QtGui.QGridLayout()
+        self.adjustGridLayout.setObjectName("adjustGridLayout")
+        self.verticalLayout_2.addLayout(self.adjustGridLayout)
         self.verticalLayout_3.addWidget(self.groupBox)
         self.buttonBox = QtGui.QDialogButtonBox(editHorseDlg)
         self.buttonBox.setOrientation(QtCore.Qt.Horizontal)
