@@ -1,0 +1,10 @@
+<RCC>
+  <qresource prefix="Icons">
+    <file alias="Quit">icons/button_delete_violet.png</file>
+    <file alias="Web">icons/web.png</file>
+    <file alias="Save">icons/document_pen.png</file>
+    <file alias="Open">icons/folder_blue.png</file>
+    <file alias="Save As">icons/button_record.png</file>
+    <file alias="New">icons/document_blank.png</file>
+  </qresource>
+</RCC>
