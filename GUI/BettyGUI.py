@@ -9,6 +9,7 @@ from PyQt4.QtGui import QMainWindow, QTableWidgetItem, QApplication, QMessageBox
 from PyQt4.QtCore import QVariant, Qt, pyqtSignature, QString, SIGNAL
 import sys
 from Model.RaceModel import RaceModel
+from Model import Chance
 
 class BettyMain(QMainWindow, Ui_Betty_MainWindow):
     '''
@@ -55,6 +56,18 @@ class BettyMain(QMainWindow, Ui_Betty_MainWindow):
             return
         self.model.removeRows(row)
         self.resizeColumns()
+
+    @pyqtSignature("")
+    def on_decimalButton_clicked(self):
+        self.model.setOddsDisplay(Chance.DecimalOddsDisplay)
+
+    @pyqtSignature("")
+    def on_betfairButton_clicked(self):
+        self.model.setOddsDisplay(Chance.BetfairOddsDisplay)
+
+    @pyqtSignature("")
+    def on_fractionalButton_clicked(self):
+        self.model.setOddsDisplay(Chance.FractionalOddsDisplay)
 
     def check_deleteButton(self):
         if(self.model.rowCount() > 2):

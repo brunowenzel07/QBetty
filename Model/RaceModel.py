@@ -10,6 +10,7 @@ from PyQt4.QtCore import Qt, SIGNAL
 from Data.Race import EmptyRace
 from Data.Horse import Horse
 from Model.Chance import Round
+from Model import Chance
 
 class RaceModel(QAbstractTableModel):
     '''
@@ -24,8 +25,9 @@ class RaceModel(QAbstractTableModel):
         super(RaceModel, self).__init__()
         self.filename = filename
         self.dirty = False
+        self.oddsDisplay = Chance.DecimalOddsDisplay
         self.race = EmptyRace()
-        self.rounds = [Round()]
+        self.rounds = [Round(70), Round(), Round(130)]
         self.ratingColumns = {}
         self.adjRatingColumns = {}
         self.adjustColumns = {}
@@ -77,7 +79,8 @@ class RaceModel(QAbstractTableModel):
                 index = self.adjRatingColumns[column]
                 return QVariant(self.race.adjusts.getAdjustedRating(horse, index))
             elif column in self.roundColumns:
-                return QVariant(self.rounds[self.roundColumns[column]].convert(horse.prob))
+                index = self.roundColumns[column]
+                return QVariant(self.oddsDisplay.display(self.rounds[index].convert(horse.prob)))
         return QVariant()
 
     def headerData(self, section, orientation, role = Qt.DisplayRole):
@@ -156,3 +159,7 @@ class RaceModel(QAbstractTableModel):
         self.updateOdds()
         self.dirty = True
         return True
+
+    def setOddsDisplay(self, displayer):
+        self.oddsDisplay = displayer
+        self.reset()
