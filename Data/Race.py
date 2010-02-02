@@ -35,8 +35,8 @@ class Race(object):
         self.horses.append(horse)
         return horse
 
-    def insert(self, position):
-        horse = Horse()
+    def insert(self, position, horse = None):
+        if horse is None: horse = Horse()
         self.horses.insert(position, horse)
         return horse
 

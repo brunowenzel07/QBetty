@@ -13,6 +13,10 @@
   <property name="windowTitle">
    <string>Betty</string>
   </property>
+  <property name="windowIcon">
+   <iconset resource="Betty.qrc">
+    <normaloff>:/Icons/Horse</normaloff>:/Icons/Horse</iconset>
+  </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout_4">
     <item>
@@ -425,7 +429,7 @@
   </widget>
   <action name="actionNew">
    <property name="icon">
-    <iconset>
+    <iconset resource="Betty.qrc">
      <normaloff>:/Icons/New</normaloff>:/Icons/New</iconset>
    </property>
    <property name="text">
@@ -443,7 +447,7 @@
   </action>
   <action name="actionOpen">
    <property name="icon">
-    <iconset>
+    <iconset resource="Betty.qrc">
      <normaloff>:/Icons/Open</normaloff>:/Icons/Open</iconset>
    </property>
    <property name="text">
@@ -458,7 +462,7 @@
   </action>
   <action name="actionSave">
    <property name="icon">
-    <iconset>
+    <iconset resource="Betty.qrc">
      <normaloff>:/Icons/Save</normaloff>:/Icons/Save</iconset>
    </property>
    <property name="text">
@@ -473,7 +477,7 @@
   </action>
   <action name="actionDownload">
    <property name="icon">
-    <iconset>
+    <iconset resource="Betty.qrc">
      <normaloff>:/Icons/Web</normaloff>:/Icons/Web</iconset>
    </property>
    <property name="text">
@@ -491,7 +495,7 @@
     <bool>false</bool>
    </property>
    <property name="icon">
-    <iconset>
+    <iconset resource="Betty.qrc">
      <normaloff>:/Icons/Quit</normaloff>:/Icons/Quit</iconset>
    </property>
    <property name="text">
@@ -508,7 +512,7 @@
   </action>
   <action name="actionSave_As">
    <property name="icon">
-    <iconset>
+    <iconset resource="Betty.qrc">
      <normaloff>:/Icons/Save As</normaloff>:/Icons/Save As</iconset>
    </property>
    <property name="text">
@@ -523,7 +527,7 @@
   </action>
   <action name="actionPrint">
    <property name="icon">
-    <iconset>
+    <iconset resource="Betty.qrc">
      <normaloff>:/Icons/Print</normaloff>:/Icons/Print</iconset>
    </property>
    <property name="text">

@@ -1,5 +1,6 @@
 <RCC>
   <qresource prefix="Icons">
+    <file alias="Horse">icons/Horse-icon48.png</file>
     <file alias="Add">icons/editadd.png</file>
     <file alias="Delete">icons/editdelete.png</file>
     <file alias="Tick">icons/editedit.png</file>
