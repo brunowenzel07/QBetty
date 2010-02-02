@@ -1,0 +1,14 @@
+<RCC>
+  <qresource prefix="Icons">
+    <file alias="Add">icons/editadd.png</file>
+    <file alias="Delete">icons/editdelete.png</file>
+    <file alias="Tick">icons/editedit.png</file>
+    <file alias="New">icons/filenew.png</file>
+    <file alias="Open">icons/fileopen.png</file>
+    <file alias="Quit">icons/filequit.png</file>
+    <file alias="Save">icons/filesave.png</file>
+    <file alias="Save As">icons/filesaveas.png</file>
+    <file alias="Print">icons/fileprint.png</file>
+    <file alias="Web">icons/web.png</file>
+  </qresource>
+</RCC>
