@@ -5,12 +5,23 @@ Created on 2 Feb 2010
 
 '''
 
-from PyQt4.Qt import QAbstractTableModel, QString, QModelIndex, QVariant
+from PyQt4.Qt import QAbstractTableModel, QModelIndex, QVariant
 from PyQt4.QtCore import Qt, SIGNAL
-from Data.Race import EmptyRace
+from Data.Race import EmptyRace, Race
 from Data.Horse import Horse
 from Model.Chance import Round
 from Model import Chance
+
+def makeRaceProperty(attribute):
+    def fget(self):
+        return self.race.__getattribute__(attribute)
+    def fset(self, value):
+        if value != self.race.__getattribute__(attribute):
+            self.dirty = True
+        return self.race.__setattr__(attribute, value)
+    return property(fget, fset)
+
+
 
 class RaceModel(QAbstractTableModel):
     '''
@@ -18,7 +29,7 @@ class RaceModel(QAbstractTableModel):
     '''
 
 
-    def __init__(self, filename = QString()):
+    def __init__(self, filename = None):
         '''
         Constructor
         '''
@@ -26,7 +37,8 @@ class RaceModel(QAbstractTableModel):
         self.filename = filename
         self.dirty = False
         self.oddsDisplay = Chance.DecimalOddsDisplay
-        self.race = EmptyRace()
+        self.race = None
+        self.load()
         self.rounds = [Round(70), Round(), Round(130)]
         self.ratingColumns = {}
         self.adjRatingColumns = {}
@@ -34,6 +46,15 @@ class RaceModel(QAbstractTableModel):
         self.roundColumns = {}
         self.setColumnMap()
         self.updateOdds()
+
+
+    racename = makeRaceProperty("name")
+    raceclass = makeRaceProperty("raceClass")
+    course = makeRaceProperty("course")
+    distance = makeRaceProperty("distance")
+    date = makeRaceProperty("date")
+    time = makeRaceProperty("time")
+    prize = makeRaceProperty("prize")
 
     def setColumnMap(self):
         self.ratingColumns = {}
@@ -163,3 +184,46 @@ class RaceModel(QAbstractTableModel):
     def setOddsDisplay(self, displayer):
         self.oddsDisplay = displayer
         self.reset()
+
+    def load(self, filename = None):
+        oldfile = self.filename
+        oldrace = self.race
+        if filename is not None:
+            self.filename = filename
+        if self.filename is not None:
+            self.race = Race()
+            if not self.race.load(self.filename):
+                self.race = oldrace
+                self.filename = oldfile
+                if oldrace is None:
+                    self.race = EmptyRace()
+                return False
+            self.setColumnMap()
+            self.reset()
+            self.updateOdds()
+            self.dirty = False
+            return True
+        else:
+            self.race = EmptyRace()
+            self.reset()
+            self.updateOdds()
+            self.dirty = False
+            return False
+
+    def newRace(self):
+        self.race = EmptyRace()
+        self.reset()
+        self.updateOdds()
+        self.dirty = False
+
+
+    def save(self, filename = None):
+        if filename is not None:
+            self.filename = unicode(filename)
+        if self.filename is not None:
+            if not self.race.save(self.filename):
+                self.filename = None
+                return False
+            self.dirty = False
+            return True
+        return False

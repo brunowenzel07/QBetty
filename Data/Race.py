@@ -5,8 +5,7 @@ Created on 1 Feb 2010
 
 '''
 from Horse import Horse
-from Adjustments import Adjustments
-from Data.Adjustments import defaultAdjusts
+from Adjustments import Adjustments, defaultAdjusts
 
 class Race(object):
     '''
@@ -16,6 +15,8 @@ class Race(object):
     __sigmoid = (1000, 900, 800, 667, 570, 500, 400, 333, 250, 200,
                  141, 111, 80, 66, 50, 40, 33, 30, 20, 10, 1)
     __siglen = len(__sigmoid) - 1
+    __tags = (("name", unicode), ("raceClass", unicode), ("course", unicode),
+              ("distance", int), ("date", unicode), ("time", unicode), ("prize", int))
 
     def __init__(self):
         '''
@@ -23,6 +24,13 @@ class Race(object):
         '''
         self.horses = []
         self.adjusts = Adjustments()
+        self.name = "Unknown"
+        self.raceClass = "Unknown"
+        self.course = "Unknown"
+        self.distance = 0
+        self.date = None
+        self.time = None
+        self.prize = 0
 
     def __len__(self):
         return len(self.horses)
@@ -48,6 +56,10 @@ class Race(object):
             self.horses.remove(horse)
 
     def calculate(self):
+        if len(self) == 0: return
+        if len(self) == 1:
+            self[0].prob = None
+            return
         adj = {}
         for horse in self:
             adj[horse] = []
@@ -73,11 +85,88 @@ class Race(object):
     def __getitem__(self, index):
         return self.horses[index]
 
+    def save(self, target):
+        if isinstance(target, basestring):
+            try: target = open(target, "w")
+            except:
+                return False
+        if not isinstance(target, file):
+            return False
+        doc = self.getXML()
+        target.write(doc.toxml())
+        return True
+
+    def load(self, target):
+        if isinstance(target, basestring):
+            try: target = open(target, "r")
+            except:
+                return False
+        if not isinstance(target, file):
+            return False
+        #return False
+        import xml.dom.minidom
+        doc = xml.dom.minidom.parse(target)
+        top = doc.documentElement
+        for tag, tagType in self.__tags:
+            for node in doc.getElementsByTagName(tag):
+                if node.parentNode != top: continue
+                textNode = node.firstChild
+                if textNode is None: continue
+                self.__setattr__(tag, tagType(textNode.nodeValue))
+        for node in doc.getElementsByTagName("adjustList"):
+            if node.parentNode != top: continue
+            self.adjusts.readXMLTree(node)
+        for node in doc.getElementsByTagName("horseList"):
+            for horseNode in doc.getElementsByTagName("horse"):
+                try: id = int(horseNode.getElementsByTagName("id").firstChild.nodeValue)
+                except: id = None
+                try: name = unicode(horseNode.getElementsByTagName("id").firstChild.nodeValue)
+                except: name = None
+                horse = self.addHorse(Horse(id, name))
+                horse.readXMLTree(horseNode)
+                self.adjusts.readHorseXMLTree(horse, horseNode)
+        return True
+
+
+    def getXML(self):
+        import xml.dom.minidom
+        impl = xml.dom.minidom.getDOMImplementation()
+        doc = impl.createDocument(None, "race", None)
+        top = doc.documentElement
+        for tag, tagType in self.__tags:
+            node = doc.createElement(tag)
+            top.appendChild(node)
+            value = self.__getattribute__(tag)
+            if value is None: continue
+            text = doc.createTextNode(str(value))
+            node.appendChild(text)
+        top.appendChild(self.adjusts.getXMLTree(doc))
+        horseList = doc.createElement("horseList")
+        top.appendChild(horseList)
+        for horse in self:
+            horseNode = horse.getXMLTree(doc)
+            horseNode.appendChild(self.adjusts.getHorseXMLTree(doc, horse))
+            horseList.appendChild(horseNode)
+        return doc
+
+
 def EmptyRace():
     r = Race()
     r.addHorse()
     r.addHorse()
     r.adjusts = defaultAdjusts()
     return r
+
+if __name__ == "__main__":
+    r = EmptyRace()
+    r.adjusts.setAdjust(0, r[0], 3)
+    d = r.getXML()
+    print d.toprettyxml()
+    r = Race()
+    print r.load(r"..\GUI\test.bty")
+    print r.name
+    print r.raceClass
+    print r.course
+    print r.distance
 
 

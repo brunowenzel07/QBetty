@@ -128,19 +128,19 @@
        </property>
        <layout class="QVBoxLayout" name="verticalLayout">
         <item>
-         <layout class="QHBoxLayout" name="horizontalLayout">
+         <layout class="QHBoxLayout" name="horizontalLayout_2">
           <item>
            <widget class="QLabel" name="label">
             <property name="text">
              <string>Race &amp;Name</string>
             </property>
             <property name="buddy">
-             <cstring>lineEdit</cstring>
+             <cstring>nameEdit</cstring>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QLineEdit" name="lineEdit"/>
+           <widget class="QLineEdit" name="nameEdit"/>
           </item>
           <item>
            <widget class="QLabel" name="label_2">
@@ -148,12 +148,21 @@
              <string>Race &amp;Course</string>
             </property>
             <property name="buddy">
-             <cstring>comboBox</cstring>
+             <cstring>courseCombo</cstring>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QComboBox" name="comboBox">
+           <widget class="QComboBox" name="courseCombo">
+            <property name="editable">
+             <bool>true</bool>
+            </property>
+            <property name="insertPolicy">
+             <enum>QComboBox::InsertAlphabetically</enum>
+            </property>
+            <property name="sizeAdjustPolicy">
+             <enum>QComboBox::AdjustToContents</enum>
+            </property>
             <item>
              <property name="text">
               <string>Ascot</string>
@@ -205,7 +214,11 @@
            </widget>
           </item>
           <item>
-           <widget class="QTimeEdit" name="timeEdit"/>
+           <widget class="QTimeEdit" name="timeEdit">
+            <property name="displayFormat">
+             <string>HH:mm</string>
+            </property>
+           </widget>
           </item>
           <item>
            <spacer name="horizontalSpacer">
@@ -223,19 +236,95 @@
          </layout>
         </item>
         <item>
-         <layout class="QHBoxLayout" name="horizontalLayout_2">
+         <layout class="QHBoxLayout" name="horizontalLayout">
+          <item>
+           <widget class="QLabel" name="label_9">
+            <property name="text">
+             <string>Distance</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QSpinBox" name="milesSpinner">
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+            <property name="readOnly">
+             <bool>false</bool>
+            </property>
+            <property name="suffix">
+             <string>m</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QComboBox" name="furlongCombo">
+            <property name="sizeAdjustPolicy">
+             <enum>QComboBox::AdjustToContentsOnFirstShow</enum>
+            </property>
+            <item>
+             <property name="text">
+              <string>0f</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>1f</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>2f</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>3f</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>4f</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>5f</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>6f</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>7f</string>
+             </property>
+            </item>
+           </widget>
+          </item>
           <item>
            <widget class="QLabel" name="label_5">
             <property name="text">
              <string>Race C&amp;lass</string>
             </property>
             <property name="buddy">
-             <cstring>comboBox_2</cstring>
+             <cstring>classCombo</cstring>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QComboBox" name="comboBox_2">
+           <widget class="QComboBox" name="classCombo">
+            <property name="editable">
+             <bool>true</bool>
+            </property>
+            <property name="insertPolicy">
+             <enum>QComboBox::InsertAlphabetically</enum>
+            </property>
+            <property name="sizeAdjustPolicy">
+             <enum>QComboBox::AdjustToContents</enum>
+            </property>
             <item>
              <property name="text">
               <string>Class A</string>
@@ -264,12 +353,12 @@
              <string>Prize Money</string>
             </property>
             <property name="buddy">
-             <cstring>spinBox</cstring>
+             <cstring>prizeSpinner</cstring>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QSpinBox" name="spinBox">
+           <widget class="QSpinBox" name="prizeSpinner">
             <property name="alignment">
              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
             </property>
@@ -372,41 +461,6 @@
            <string>Edit Adjustments</string>
           </property>
          </widget>
-        </item>
-       </layout>
-      </widget>
-     </item>
-     <item>
-      <widget class="QGroupBox" name="groupBox_2">
-       <property name="title">
-        <string>Download Settings</string>
-       </property>
-       <layout class="QGridLayout" name="gridLayout">
-        <item row="0" column="0">
-         <widget class="QLabel" name="label_6">
-          <property name="text">
-           <string>Username</string>
-          </property>
-          <property name="buddy">
-           <cstring>lineEdit_2</cstring>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="0">
-         <widget class="QLineEdit" name="lineEdit_2"/>
-        </item>
-        <item row="2" column="0">
-         <widget class="QLabel" name="label_7">
-          <property name="text">
-           <string>Password</string>
-          </property>
-          <property name="buddy">
-           <cstring>lineEdit_3</cstring>
-          </property>
-         </widget>
-        </item>
-        <item row="3" column="0">
-         <widget class="QLineEdit" name="lineEdit_3"/>
         </item>
        </layout>
       </widget>
@@ -541,6 +595,24 @@
    </property>
   </action>
  </widget>
+ <tabstops>
+  <tabstop>nameEdit</tabstop>
+  <tabstop>courseCombo</tabstop>
+  <tabstop>dateEdit</tabstop>
+  <tabstop>timeEdit</tabstop>
+  <tabstop>milesSpinner</tabstop>
+  <tabstop>furlongCombo</tabstop>
+  <tabstop>classCombo</tabstop>
+  <tabstop>prizeSpinner</tabstop>
+  <tabstop>decimalButton</tabstop>
+  <tabstop>betfairButton</tabstop>
+  <tabstop>fractionalButton</tabstop>
+  <tabstop>pushButton</tabstop>
+  <tabstop>pushButton_2</tabstop>
+  <tabstop>raceTable</tabstop>
+  <tabstop>addButton</tabstop>
+  <tabstop>deleteButton</tabstop>
+ </tabstops>
  <resources>
   <include location="Betty.qrc"/>
  </resources>

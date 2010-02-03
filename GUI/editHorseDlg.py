@@ -39,4 +39,3 @@ if __name__ == "__main__":
     form = editHorseDlg(h)
     form.show()
     app.exec_()
-    print h.name, h.rpr, h.ts

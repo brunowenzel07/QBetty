@@ -78,6 +78,45 @@ class Adjustments(object):
     def __str__(self):
         return ",".join(self.__order)
 
+    def getXMLTree(self, doc):
+        top = doc.createElement("adjustList")
+        for adjust in self.__order:
+            node = doc.createElement("adjust")
+            top.appendChild(node)
+            text = doc.createTextNode(adjust)
+            node.appendChild(text)
+        return top
+
+    def readXMLTree(self, listnode):
+        for node in listnode.getElementsByTagName("adjust"):
+            if node.parentNode != listnode: continue
+            try: name = unicode(node.firstChild.nodeValue)
+            except: continue
+            self.addAdjustment(name)
+
+    def getHorseXMLTree(self, doc, horse):
+        top = doc.createElement("adjustList")
+        for adjust in self.__order:
+            value = self.getAdjust(adjust, horse)
+            if value == 0:
+                continue
+            node = doc.createElement("adjust")
+            node.setAttribute("name", adjust)
+            top.appendChild(node)
+            text = doc.createTextNode(str(value))
+            node.appendChild(text)
+        return top
+
+    def readHorseXMLTree(self, horse, horsenode):
+        for listnode in horsenode.getElementsByTagName("adjustList"):
+            for node in listnode.getElementsByTagName("adjust"):
+                try: value = int(node.firstChild.nodeValue)
+                except: continue
+                adjust = unicode(node.getAttribute("name"))
+                self.setAdjust(adjust, horse, value)
+
+
+
 def defaultAdjusts():
     ads = Adjustments()
     ads.addAdjustment("Form")
