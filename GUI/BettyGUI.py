@@ -178,17 +178,19 @@ class BettyMain(QMainWindow, Ui_Betty_MainWindow):
         if reply == QMessageBox.Cancel:
             return False
         elif reply == QMessageBox.Yes:
-            self.fileSave()
+            return self.fileSave()
         return True
 
     def fileSave(self, filename = None):
         if filename is None:
             filename = self.model.filename
         if filename is None:
-            self.fileSaveAs()
+            return self.fileSaveAs()
         else:
             if not self.model.save(filename):
                 QMessageBox.warning(self, "File Error", "Could not save %s" % filename)
+                return False
+            return True
 
     def fileSaveAs(self):
         path = QFileInfo(self.model.filename).path() if self.model.filename is not None else "."
@@ -199,7 +201,9 @@ class BettyMain(QMainWindow, Ui_Betty_MainWindow):
         if not filename.isEmpty():
             if not filename.contains("."):
                 filename += self.__formatExtension
-            self.fileSave(filename)
+            return self.fileSave(filename)
+        else:
+            return False
 
     def fileOpen(self, filename = None):
         if not self.okToContinue():
@@ -215,13 +219,17 @@ class BettyMain(QMainWindow, Ui_Betty_MainWindow):
             else:
                 QMessageBox.warning(self, "File Error", "Could not load %s" % filename)
 
-
-
     def check_deleteButton(self):
         if(self.model.rowCount() > 2):
             self.deleteButton.setEnabled(True)
         else:
             self.deleteButton.setEnabled(False)
+
+    def closeEvent(self, event):
+        if self.okToContinue():
+            pass
+        else:
+            event.ignore()
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
