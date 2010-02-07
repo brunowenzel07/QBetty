@@ -12,6 +12,10 @@ import sys
 from Model.RaceModel import RaceModel
 from Model import Chance
 from GUI.RaceDelegate import RaceDelegate
+import os
+
+appName = "Betty"
+appVersion = "0.1"
 
 def setCombo(combo, itemText):
     itemList = [unicode(combo.itemText(i)) for
@@ -34,7 +38,6 @@ class BettyMain(QMainWindow, Ui_Betty_MainWindow):
         Constructor
         '''
         super(BettyMain, self).__init__(parent)
-        self.filename = filename
         self.model = RaceModel(filename)
         self.setupUi(self)
         self.deleteButton.setEnabled(False)
@@ -45,11 +48,21 @@ class BettyMain(QMainWindow, Ui_Betty_MainWindow):
         self.connect(self.model, SIGNAL("rowsRemoved(QModelIndex,int,int)"),
                      self.check_deleteButton)
         self.reset()
+        self.connect(self.model, SIGNAL("dirtied"), self.dirtied)
 
     def reset(self):
         self.populateInfo()
         self.resizeColumns()
         self.check_deleteButton()
+        if self.model.filename is None:
+            self.setWindowTitle("%s v%s - Unnamed[*]" % (appName, appVersion))
+        else:
+            self.setWindowTitle("%s v%s - %s[*]" % (appName, appVersion,
+                                                    os.path.basename(self.model.filename)))
+        self.setWindowModified(self.model.dirty)
+
+    def dirtied(self):
+        self.setWindowModified(self.model.dirty)
 
     def resizeColumns(self):
         self.raceTable.resizeColumnsToContents()

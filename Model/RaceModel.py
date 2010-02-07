@@ -47,6 +47,15 @@ class RaceModel(QAbstractTableModel):
         self.setColumnMaps()
         self.updateOdds()
 
+    def __GetDirty(self):
+        return self.__dirty
+
+    def __SetDirty(self, value):
+        self.__dirty = value
+        self.emit(SIGNAL("dirtied"))
+
+    dirty = property(__GetDirty, __SetDirty, None, "dirty's docstring")
+
     racename = makeRaceProperty("name")
     raceclass = makeRaceProperty("raceClass")
     course = makeRaceProperty("course")

@@ -3,7 +3,7 @@ QBetty is a horse racing odds predictor, written using Python and Qt.
 TODO
 - Spinbox editing of ratings and adjustments: Done 7/2/2010
 - Sensible quitting behaviour: Done 7/2/2010
-- Filename in window title
+- Filename in window title: Done 7/2/2010
 - Allow editing of rounds and adjustments
 - Restore settings on program start
 - Recent files section in File menu
