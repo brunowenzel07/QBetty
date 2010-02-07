@@ -75,6 +75,9 @@ class Adjustments(object):
             self.__order.remove(adjust)
             self.__order.insert(index + 1, adjust)
 
+    def reset(self, newAdjustList):
+        pass
+
     def __str__(self):
         return ",".join(self.__order)
 
@@ -117,12 +120,13 @@ class Adjustments(object):
 
 
 
+__defaultAdjustments = ["Form", "Course", "Distance"]
+
 def defaultAdjusts():
-    ads = Adjustments()
-    ads.addAdjustment("Form")
-    ads.addAdjustment("Course")
-    ads.addAdjustment("Distance")
-    return ads
+    emptyAdjusts = Adjustments()
+    for newAdjust in __defaultAdjustments:
+        emptyAdjusts.addAdjustment(newAdjust)
+    return emptyAdjusts
 
 if __name__ == "__main__":
     ads = Adjustments()
@@ -148,11 +152,11 @@ if __name__ == "__main__":
     print ads
     from Horse import Horse
     h = Horse()
-    for rname, rating in ads.iterAdjustedRatings(h):
-        print rname, rating
+    for ratingname, ratingVal in ads.iterAdjustedRatings(h):
+        print ratingname, ratingVal
     ads.setAdjust("a", h, 3)
-    for rname, rating in ads.iterAdjustedRatings(h):
-        print rname, rating
+    for ratingname, ratingVal in ads.iterAdjustedRatings(h):
+        print ratingname, ratingVal
     ads.setAdjust("b", h, -2)
-    for rname, rating in ads.iterAdjustedRatings(h):
-        print rname, rating
+    for ratingname, ratingVal in ads.iterAdjustedRatings(h):
+        print ratingname, ratingVal

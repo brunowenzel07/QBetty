@@ -434,6 +434,9 @@
         </item>
         <item>
          <widget class="QRadioButton" name="fractionalButton">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
           <property name="text">
            <string>&amp;Fractional</string>
           </property>
@@ -490,7 +493,7 @@
     <string>New</string>
    </property>
    <property name="toolTip">
-    <string>Create a new race</string>
+    <string>New</string>
    </property>
    <property name="statusTip">
     <string>Create a new race</string>
@@ -508,6 +511,9 @@
     <string>Open</string>
    </property>
    <property name="toolTip">
+    <string>Open</string>
+   </property>
+   <property name="statusTip">
     <string>Open a race file</string>
    </property>
    <property name="shortcut">
@@ -523,6 +529,9 @@
     <string>Save</string>
    </property>
    <property name="toolTip">
+    <string>Save</string>
+   </property>
+   <property name="statusTip">
     <string>Save this race</string>
    </property>
    <property name="shortcut">
@@ -538,6 +547,9 @@
     <string>Download</string>
    </property>
    <property name="toolTip">
+    <string>Download</string>
+   </property>
+   <property name="statusTip">
     <string>Download race information</string>
    </property>
    <property name="shortcut">
@@ -556,6 +568,9 @@
     <string>Quit</string>
    </property>
    <property name="toolTip">
+    <string>Quit</string>
+   </property>
+   <property name="statusTip">
     <string>Quit Betty</string>
    </property>
   </action>
@@ -573,6 +588,9 @@
     <string>Save As</string>
    </property>
    <property name="toolTip">
+    <string>Save As</string>
+   </property>
+   <property name="statusTip">
     <string>Save this race in a new file</string>
    </property>
    <property name="shortcut">
@@ -588,6 +606,9 @@
     <string>Print</string>
    </property>
    <property name="toolTip">
+    <string>Print</string>
+   </property>
+   <property name="statusTip">
     <string>Print this race</string>
    </property>
    <property name="shortcut">

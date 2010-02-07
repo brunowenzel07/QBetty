@@ -21,8 +21,6 @@ def makeRaceProperty(attribute):
         return self.race.__setattr__(attribute, value)
     return property(fget, fset)
 
-
-
 class RaceModel(QAbstractTableModel):
     '''
     classdocs
@@ -40,13 +38,14 @@ class RaceModel(QAbstractTableModel):
         self.race = None
         self.load()
         self.rounds = [Round(70), Round(), Round(130)]
-        self.ratingColumns = {}
-        self.adjRatingColumns = {}
-        self.adjustColumns = {}
-        self.roundColumns = {}
-        self.setColumnMap()
+        self.__columnMaps = {}
+        self.makeColumns("name")
+        self.makeColumns("rating")
+        self.makeColumns("adjRating")
+        self.makeColumns("adjust")
+        self.makeColumns("round")
+        self.setColumnMaps()
         self.updateOdds()
-
 
     racename = makeRaceProperty("name")
     raceclass = makeRaceProperty("raceClass")
@@ -56,29 +55,48 @@ class RaceModel(QAbstractTableModel):
     time = makeRaceProperty("time")
     prize = makeRaceProperty("prize")
 
-    def setColumnMap(self):
-        self.ratingColumns = {}
-        self.adjRatingColumns = {}
-        self.adjustColumns = {}
-        self.roundColumns = {}
-        column = 1
-        for index in xrange(0, Horse.numRatings):
-            self.ratingColumns[column] = index
-            column += 1
-        for index in xrange(0, len(self.race.adjusts)):
-            self.adjustColumns[column] = index
-            column += 1
-        for index in xrange(0, Horse.numRatings):
-            self.adjRatingColumns[column] = index
-            column += 1
-        for index, round in enumerate(self.rounds):
-            self.roundColumns[column] = index
-            column += 1
+    def makeColumns(self, columnGroup):
+        self.__columnMaps[columnGroup] = {}
+        getColName = "%sColumn" % columnGroup
+        def getCol(slf, index):
+            if isinstance(index, QModelIndex):
+                return slf.__columnMaps[columnGroup][index.column()]
+            else:
+                return slf.__columnMaps[columnGroup][index]
+        self.__setattr__(getColName, getCol)
+
+    def isColumn(self, columnGroup, index):
+        if isinstance(index, QModelIndex):
+            return self.isColumn(columnGroup, index.column())
+        else:
+            return index in self.__columnMaps[columnGroup]
+
+    def getColumn(self, columnGroup, index):
+        if isinstance(index, QModelIndex):
+            return self.getColumn(columnGroup, index.column())
+        else:
+            return self.__columnMaps[columnGroup][index]
+
+    def __setColumnMap(self, mapName, startCol, iterator):
+        total = 0
+        for index in iterator:
+            self.__columnMaps[mapName][startCol + total] = index
+            total += 1
+        return total
+
+    def setColumnMaps(self):
+        for colMap in self.__columnMaps:
+            self.__columnMaps[colMap] = {}
+        column = self.__setColumnMap("name", 0, xrange(0, 1))
+        column += self.__setColumnMap("rating", column, xrange(0, Horse.numRatings))
+        column += self.__setColumnMap("adjust", column, xrange(0, len(self.race.adjusts)))
+        column += self.__setColumnMap("adjRating", column, xrange(0, Horse.numRatings))
+        column += self.__setColumnMap("round", column, xrange(0, len(self.rounds)))
 
     def rowCount(self, index = QModelIndex()):
         return len(self.race)
 
-    def columnCount(self, index = QModelIndex()):
+    def columnCount(self, index = QModelIndex()): #@UnusedVariable
         return len(self.race.adjusts) + (Horse.numRatings * 2) + 1 + len(self.rounds)
 
     def data(self, index, role = Qt.DisplayRole):
@@ -88,39 +106,44 @@ class RaceModel(QAbstractTableModel):
         horse = self.race[index.row()]
         column = index.column()
         if role == Qt.DisplayRole:
-            if column == 0:
+            if self.isColumn("name", column):
                 return QVariant(horse.name)
-            elif column in self.ratingColumns:
-                return QVariant(horse[self.ratingColumns[column]])
-            elif column in self.adjustColumns:
-                index = self.adjustColumns[column]
+            elif self.isColumn("rating", column):
+                return QVariant(horse[self.getColumn("rating", column)])
+            elif self.isColumn("adjust", column):
+                index = self.getColumn("adjust", column)
                 return QVariant(self.race.adjusts.getAdjust(self.race.adjusts[index],
                                                              horse))
-            elif column in self.adjRatingColumns:
-                index = self.adjRatingColumns[column]
+            elif self.isColumn("adjRating", column):
+                index = self.getColumn("adjRating", column)
                 return QVariant(self.race.adjusts.getAdjustedRating(horse, index))
-            elif column in self.roundColumns:
-                index = self.roundColumns[column]
+            elif self.isColumn("round", column):
+                index = self.getColumn("round", column)
                 return QVariant(self.oddsDisplay.display(self.rounds[index].convert(horse.prob)))
+        elif role == Qt.TextAlignmentRole:
+            if self.isColumn("name", column):
+                return QVariant(int(Qt.AlignLeft | Qt.AlignVCenter))
+            else:
+                return QVariant(int(Qt.AlignRight | Qt.AlignVCenter))
         return QVariant()
 
     def headerData(self, section, orientation, role = Qt.DisplayRole):
         if role != Qt.DisplayRole:
             return QVariant()
         if orientation == Qt.Horizontal:
-            if section == 0:
+            if self.isColumn("name", section):
                 return QVariant("Horse name")
-            elif section in self.ratingColumns:
-                index = self.ratingColumns[section]
+            elif self.isColumn("rating", section):
+                index = self.getColumn("rating", section)
                 return QVariant(Horse.ratingTitles[index])
-            elif section in self.adjustColumns:
-                index = self.adjustColumns[section]
+            elif self.isColumn("adjust", section):
+                index = self.getColumn("adjust", section)
                 return QVariant(self.race.adjusts[index])
-            elif section in self.adjRatingColumns:
-                index = self.adjRatingColumns[section]
-                return QVariant("Adjusted " + Horse.ratingTitles[index])
-            elif section in self.roundColumns:
-                index = self.roundColumns[section]
+            elif self.isColumn("adjRating", section):
+                index = self.getColumn("adjRating", section)
+                return QVariant("Adjusted\n" + Horse.ratingTitles[index])
+            elif self.isColumn("round", section):
+                index = self.getColumn("round", section)
                 return QVariant("%d%%" % self.rounds[index].roundVal)
             else:
                 return QVariant(int(section + 1))
@@ -132,7 +155,7 @@ class RaceModel(QAbstractTableModel):
     def flags(self, index):
         if not index.isValid():
             return Qt.ItemIsEnabled
-        if index.column() in self.roundColumns or index.column() in self.adjRatingColumns:
+        if self.isColumn("round", index) or self.isColumn("adjRating", index):
             return Qt.ItemFlags(QAbstractTableModel.flags(self, index))
         return Qt.ItemFlags(QAbstractTableModel.flags(self, index) |
                             Qt.ItemIsEditable)
@@ -141,15 +164,15 @@ class RaceModel(QAbstractTableModel):
         if index.isValid() and 0 <= index.row() < len(self.race):
             horse = self.race[index.row()]
             column = index.column()
-            if column == 0:
+            if self.isColumn("name", column):
                 horse.name = value.toString()
-            elif column in self.ratingColumns:
-                colIndex = self.ratingColumns[column]
+            elif self.isColumn("rating", column):
+                colIndex = self.getColumn("rating", column)
                 value, ok = value.toInt()
                 if ok:
                     horse[colIndex] = value
-            elif column in self.adjustColumns:
-                colIndex = self.adjustColumns[column]
+            elif self.isColumn("adjust", column):
+                colIndex = self.getColumn("adjust", column)
                 value, ok = value.toInt()
                 if ok:
                     self.race.adjusts.setAdjust(colIndex, horse, value)
@@ -198,7 +221,7 @@ class RaceModel(QAbstractTableModel):
                 if oldrace is None:
                     self.race = EmptyRace()
                 return False
-            self.setColumnMap()
+            self.setColumnMaps()
             self.reset()
             self.updateOdds()
             self.dirty = False

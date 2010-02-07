@@ -5,6 +5,12 @@ Created on 2 Feb 2010
 
 '''
 
+def numDecimals(x):
+    if x > 10:
+        return 0
+    if x > 5: return 1
+    return 2
+
 class DecimalOddsDisplay(object):
     '''
     classdocs
@@ -18,7 +24,8 @@ class DecimalOddsDisplay(object):
         elif prob > 1:
             return "0.00"
         else:
-            return "%0.2f" % ((1 - prob) / prob)
+            odds = (1 - prob) / prob
+            return "%0.*f" % (numDecimals(odds), odds)
 
 class BetfairOddsDisplay(object):
     @classmethod
@@ -38,7 +45,7 @@ class FractionalOddsDisplay(object):
         elif prob > 1:
             return "0.00"
         else:
-            return "x/y"
+            return "---/---"
 
 
 

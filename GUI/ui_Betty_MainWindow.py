@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'C:\Users\Mike_2\Eclipse workspace\Betty\src\GUI\Betty_MainWindow.ui'
 #
-# Created: Wed Feb 03 01:13:32 2010
+# Created: Sun Feb 07 17:51:39 2010
 #      by: PyQt4 UI code generator 4.7
 #
 # WARNING! All changes made in this file will be lost!
@@ -168,6 +168,7 @@ class Ui_Betty_MainWindow(object):
         self.betfairButton.setObjectName("betfairButton")
         self.verticalLayout_2.addWidget(self.betfairButton)
         self.fractionalButton = QtGui.QRadioButton(self.groupBox)
+        self.fractionalButton.setEnabled(False)
         self.fractionalButton.setObjectName("fractionalButton")
         self.verticalLayout_2.addWidget(self.fractionalButton)
         self.verticalLayout_6.addWidget(self.groupBox)
@@ -313,26 +314,32 @@ class Ui_Betty_MainWindow(object):
         self.pushButton.setText(QtGui.QApplication.translate("Betty_MainWindow", "Edit Rounds", None, QtGui.QApplication.UnicodeUTF8))
         self.pushButton_2.setText(QtGui.QApplication.translate("Betty_MainWindow", "Edit Adjustments", None, QtGui.QApplication.UnicodeUTF8))
         self.actionNew.setText(QtGui.QApplication.translate("Betty_MainWindow", "New", None, QtGui.QApplication.UnicodeUTF8))
-        self.actionNew.setToolTip(QtGui.QApplication.translate("Betty_MainWindow", "Create a new race", None, QtGui.QApplication.UnicodeUTF8))
+        self.actionNew.setToolTip(QtGui.QApplication.translate("Betty_MainWindow", "New", None, QtGui.QApplication.UnicodeUTF8))
         self.actionNew.setStatusTip(QtGui.QApplication.translate("Betty_MainWindow", "Create a new race", None, QtGui.QApplication.UnicodeUTF8))
         self.actionNew.setShortcut(QtGui.QApplication.translate("Betty_MainWindow", "Ctrl+N", None, QtGui.QApplication.UnicodeUTF8))
         self.actionOpen.setText(QtGui.QApplication.translate("Betty_MainWindow", "Open", None, QtGui.QApplication.UnicodeUTF8))
-        self.actionOpen.setToolTip(QtGui.QApplication.translate("Betty_MainWindow", "Open a race file", None, QtGui.QApplication.UnicodeUTF8))
+        self.actionOpen.setToolTip(QtGui.QApplication.translate("Betty_MainWindow", "Open", None, QtGui.QApplication.UnicodeUTF8))
+        self.actionOpen.setStatusTip(QtGui.QApplication.translate("Betty_MainWindow", "Open a race file", None, QtGui.QApplication.UnicodeUTF8))
         self.actionOpen.setShortcut(QtGui.QApplication.translate("Betty_MainWindow", "Ctrl+O", None, QtGui.QApplication.UnicodeUTF8))
         self.actionSave.setText(QtGui.QApplication.translate("Betty_MainWindow", "Save", None, QtGui.QApplication.UnicodeUTF8))
-        self.actionSave.setToolTip(QtGui.QApplication.translate("Betty_MainWindow", "Save this race", None, QtGui.QApplication.UnicodeUTF8))
+        self.actionSave.setToolTip(QtGui.QApplication.translate("Betty_MainWindow", "Save", None, QtGui.QApplication.UnicodeUTF8))
+        self.actionSave.setStatusTip(QtGui.QApplication.translate("Betty_MainWindow", "Save this race", None, QtGui.QApplication.UnicodeUTF8))
         self.actionSave.setShortcut(QtGui.QApplication.translate("Betty_MainWindow", "Ctrl+S", None, QtGui.QApplication.UnicodeUTF8))
         self.actionDownload.setText(QtGui.QApplication.translate("Betty_MainWindow", "Download", None, QtGui.QApplication.UnicodeUTF8))
-        self.actionDownload.setToolTip(QtGui.QApplication.translate("Betty_MainWindow", "Download race information", None, QtGui.QApplication.UnicodeUTF8))
+        self.actionDownload.setToolTip(QtGui.QApplication.translate("Betty_MainWindow", "Download", None, QtGui.QApplication.UnicodeUTF8))
+        self.actionDownload.setStatusTip(QtGui.QApplication.translate("Betty_MainWindow", "Download race information", None, QtGui.QApplication.UnicodeUTF8))
         self.actionDownload.setShortcut(QtGui.QApplication.translate("Betty_MainWindow", "Ctrl+W", None, QtGui.QApplication.UnicodeUTF8))
         self.actionQuit.setText(QtGui.QApplication.translate("Betty_MainWindow", "Quit", None, QtGui.QApplication.UnicodeUTF8))
-        self.actionQuit.setToolTip(QtGui.QApplication.translate("Betty_MainWindow", "Quit Betty", None, QtGui.QApplication.UnicodeUTF8))
+        self.actionQuit.setToolTip(QtGui.QApplication.translate("Betty_MainWindow", "Quit", None, QtGui.QApplication.UnicodeUTF8))
+        self.actionQuit.setStatusTip(QtGui.QApplication.translate("Betty_MainWindow", "Quit Betty", None, QtGui.QApplication.UnicodeUTF8))
         self.actionRecent_Files.setText(QtGui.QApplication.translate("Betty_MainWindow", "Recent Files", None, QtGui.QApplication.UnicodeUTF8))
         self.actionSave_As.setText(QtGui.QApplication.translate("Betty_MainWindow", "Save As", None, QtGui.QApplication.UnicodeUTF8))
-        self.actionSave_As.setToolTip(QtGui.QApplication.translate("Betty_MainWindow", "Save this race in a new file", None, QtGui.QApplication.UnicodeUTF8))
+        self.actionSave_As.setToolTip(QtGui.QApplication.translate("Betty_MainWindow", "Save As", None, QtGui.QApplication.UnicodeUTF8))
+        self.actionSave_As.setStatusTip(QtGui.QApplication.translate("Betty_MainWindow", "Save this race in a new file", None, QtGui.QApplication.UnicodeUTF8))
         self.actionSave_As.setShortcut(QtGui.QApplication.translate("Betty_MainWindow", "Ctrl+Shift+S", None, QtGui.QApplication.UnicodeUTF8))
         self.actionPrint.setText(QtGui.QApplication.translate("Betty_MainWindow", "Print", None, QtGui.QApplication.UnicodeUTF8))
-        self.actionPrint.setToolTip(QtGui.QApplication.translate("Betty_MainWindow", "Print this race", None, QtGui.QApplication.UnicodeUTF8))
+        self.actionPrint.setToolTip(QtGui.QApplication.translate("Betty_MainWindow", "Print", None, QtGui.QApplication.UnicodeUTF8))
+        self.actionPrint.setStatusTip(QtGui.QApplication.translate("Betty_MainWindow", "Print this race", None, QtGui.QApplication.UnicodeUTF8))
         self.actionPrint.setShortcut(QtGui.QApplication.translate("Betty_MainWindow", "Ctrl+P", None, QtGui.QApplication.UnicodeUTF8))
 
 import Betty_rc

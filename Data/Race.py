@@ -118,11 +118,11 @@ class Race(object):
             self.adjusts.readXMLTree(node)
         for node in doc.getElementsByTagName("horseList"):
             for horseNode in doc.getElementsByTagName("horse"):
-                try: id = int(horseNode.getElementsByTagName("id").firstChild.nodeValue)
-                except: id = None
+                try: horseId = int(horseNode.getElementsByTagName("id").firstChild.nodeValue)
+                except: horseId = None
                 try: name = unicode(horseNode.getElementsByTagName("id").firstChild.nodeValue)
                 except: name = None
-                horse = self.addHorse(Horse(id, name))
+                horse = self.addHorse(Horse(horseId, name))
                 horse.readXMLTree(horseNode)
                 self.adjusts.readHorseXMLTree(horse, horseNode)
         return True
@@ -151,22 +151,22 @@ class Race(object):
 
 
 def EmptyRace():
-    r = Race()
-    r.addHorse()
-    r.addHorse()
-    r.adjusts = defaultAdjusts()
-    return r
+    emptyRace = Race()
+    emptyRace.addHorse()
+    emptyRace.addHorse()
+    emptyRace.adjusts = defaultAdjusts()
+    return emptyRace
 
 if __name__ == "__main__":
-    r = EmptyRace()
-    r.adjusts.setAdjust(0, r[0], 3)
-    d = r.getXML()
+    race = EmptyRace()
+    race.adjusts.setAdjust(0, race[0], 3)
+    d = race.getXML()
     print d.toprettyxml()
-    r = Race()
-    print r.load(r"..\GUI\test.bty")
-    print r.name
-    print r.raceClass
-    print r.course
-    print r.distance
+    race = Race()
+    print race.load(r"..\GUI\test.bty")
+    print race.name
+    print race.raceClass
+    print race.course
+    print race.distance
 
 

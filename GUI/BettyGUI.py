@@ -11,6 +11,7 @@ from PyQt4.QtCore import pyqtSignature, QString, SIGNAL, QFileInfo, QDate, QTime
 import sys
 from Model.RaceModel import RaceModel
 from Model import Chance
+from GUI.RaceDelegate import RaceDelegate
 
 def setCombo(combo, itemText):
     itemList = [unicode(combo.itemText(i)) for
@@ -38,12 +39,17 @@ class BettyMain(QMainWindow, Ui_Betty_MainWindow):
         self.setupUi(self)
         self.deleteButton.setEnabled(False)
         self.raceTable.setModel(self.model)
+        self.raceTable.setItemDelegate(RaceDelegate(self))
         self.connect(self.model, SIGNAL("rowsInserted(QModelIndex,int,int)"),
                      self.check_deleteButton)
         self.connect(self.model, SIGNAL("rowsRemoved(QModelIndex,int,int)"),
                      self.check_deleteButton)
-        self.resizeColumns()
+        self.reset()
+
+    def reset(self):
         self.populateInfo()
+        self.resizeColumns()
+        self.check_deleteButton()
 
     def resizeColumns(self):
         self.raceTable.resizeColumnsToContents()
@@ -145,7 +151,10 @@ class BettyMain(QMainWindow, Ui_Betty_MainWindow):
 
     @pyqtSignature("")
     def on_actionNew_triggered(self):
-        self.newRace()
+        if not self.okToContinue():
+            return
+        self.model.newRace()
+        self.reset()
 
     @pyqtSignature("")
     def on_actionSave_triggered(self):
@@ -171,13 +180,6 @@ class BettyMain(QMainWindow, Ui_Betty_MainWindow):
         elif reply == QMessageBox.Yes:
             self.fileSave()
         return True
-
-    def newRace(self):
-        if not self.okToContinue():
-            return
-        self.model.newRace()
-        self.populateInfo()
-        self.resizeColumns()
 
     def fileSave(self, filename = None):
         if filename is None:
@@ -209,8 +211,7 @@ class BettyMain(QMainWindow, Ui_Betty_MainWindow):
                                                "Betty files (%s)" % self.__formatExtension)
         if not filename.isEmpty():
             if self.model.load(unicode(filename)):
-                self.populateInfo()
-                self.resizeColumns()
+                self.reset()
             else:
                 QMessageBox.warning(self, "File Error", "Could not load %s" % filename)
 
