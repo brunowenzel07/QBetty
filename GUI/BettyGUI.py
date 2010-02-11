@@ -7,12 +7,14 @@ Created on 1 Feb 2010
 from ui_Betty_MainWindow import Ui_Betty_MainWindow
 from PyQt4.QtGui import (QMainWindow, QApplication,
                          QMessageBox, QFileDialog)
-from PyQt4.QtCore import pyqtSignature, QString, SIGNAL, QFileInfo, QDate, QTime
+from PyQt4.QtCore import (pyqtSignature, QString, SIGNAL, QFileInfo, QDate, QTime,
+                          QSettings, QVariant, QSize, QPoint, QStringList)
 import sys
-from Model.RaceModel import RaceModel
+from Model.RaceModel import RaceModel, getDefaultAdjustments
 from Model import Chance
 from GUI.RaceDelegate import RaceDelegate
 import os
+from GUI.editRoundsDlg import editRoundsDlg
 
 appName = "Betty"
 appVersion = "0.1"
@@ -33,12 +35,24 @@ class BettyMain(QMainWindow, Ui_Betty_MainWindow):
 
     __formatExtension = "*.bty"
 
-    def __init__(self, filename = None, parent = None):
+    def __init__(self, parent = None):
         '''
         Constructor
         '''
         super(BettyMain, self).__init__(parent)
-        self.model = RaceModel(filename)
+        settings = QSettings()
+        self.recentFiles = settings.value("RecentFiles").toStringList()
+        filename = unicode(settings.value("LastFile").toString())
+        size = settings.value("MainWindow/Size", QVariant(QSize(100, 500))).toSize()
+        pos = settings.value("MainWindow/Position",
+                           QVariant(QPoint(100, 100))).toPoint()
+        state = settings.value("MainWindow/State").toByteArray()
+        rounds = settings.value("Rounds").toStringList()
+        if len(rounds) > 0:
+            rounds = [ int(unicode(r)) for r in rounds ]
+        else:
+            rounds = None
+        self.model = RaceModel(filename, rounds = rounds)
         self.setupUi(self)
         self.deleteButton.setEnabled(False)
         self.raceTable.setModel(self.model)
@@ -49,6 +63,9 @@ class BettyMain(QMainWindow, Ui_Betty_MainWindow):
                      self.check_deleteButton)
         self.reset()
         self.connect(self.model, SIGNAL("dirtied"), self.dirtied)
+        self.move(pos)
+        self.resize(size)
+        self.restoreState(state)
 
     def reset(self):
         self.populateInfo()
@@ -181,6 +198,19 @@ class BettyMain(QMainWindow, Ui_Betty_MainWindow):
     def on_actionOpen_triggered(self):
         self.fileOpen()
 
+    @pyqtSignature("")
+    def on_actionAbout_triggered(self):
+        message = "%s v%s" % (appName, appVersion)
+        message += os.linesep
+        message += "Copyright Mike Thomas 2010"
+        QMessageBox.about(self, "About...", message)
+
+    @pyqtSignature("")
+    def on_editRoundsButton_clicked(self):
+        dlg = editRoundsDlg(self.model, self)
+        if dlg.exec_():
+            self.model.setRounds(dlg.getRounds())
+
     def okToContinue(self):
         if not self.model.dirty:
             return True
@@ -240,12 +270,22 @@ class BettyMain(QMainWindow, Ui_Betty_MainWindow):
 
     def closeEvent(self, event):
         if self.okToContinue():
-            pass
+            settings = QSettings()
+            settings.setValue("MainWindow/Size", QVariant(self.size()))
+            settings.setValue("MainWindow/Position", QVariant(self.pos()))
+            settings.setValue("MainWindow/State", QVariant(self.saveState()))
+            filename = QVariant(QString(self.model.filename)) if self.model.filename is not None else QVariant()
+            settings.setValue("LastFile", filename)
+            settings.setValue("Rounds", QVariant(QStringList(self.model.roundSizes())))
+            settings.setValue("DefaultAdjusts", QVariant(QStringList(getDefaultAdjustments())))
         else:
             event.ignore()
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
+    app.setOrganizationName("Whatang Software")
+    app.setOrganizationDomain("whatang.org")
+    app.setApplicationName(appName)
     main = BettyMain()
     main.show()
     app.exec_()

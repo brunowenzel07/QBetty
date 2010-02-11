@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'C:\Users\Mike_2\Eclipse workspace\Betty\src\GUI\editAdjustDlg.ui'
 #
-# Created: Sun Feb 07 18:10:40 2010
+# Created: Thu Feb 11 21:12:08 2010
 #      by: PyQt4 UI code generator 4.7
 #
 # WARNING! All changes made in this file will be lost!
@@ -26,21 +26,24 @@ class Ui_adjustDlg(object):
         self.horizontalLayout.addWidget(self.listWidget)
         self.verticalLayout = QtGui.QVBoxLayout()
         self.verticalLayout.setObjectName("verticalLayout")
-        self.pushButton = QtGui.QPushButton(adjustDlg)
-        self.pushButton.setObjectName("pushButton")
-        self.verticalLayout.addWidget(self.pushButton)
-        self.pushButton_2 = QtGui.QPushButton(adjustDlg)
-        self.pushButton_2.setObjectName("pushButton_2")
-        self.verticalLayout.addWidget(self.pushButton_2)
-        self.pushButton_3 = QtGui.QPushButton(adjustDlg)
-        self.pushButton_3.setObjectName("pushButton_3")
-        self.verticalLayout.addWidget(self.pushButton_3)
-        self.pushButton_4 = QtGui.QPushButton(adjustDlg)
-        self.pushButton_4.setObjectName("pushButton_4")
-        self.verticalLayout.addWidget(self.pushButton_4)
-        self.pushButton_5 = QtGui.QPushButton(adjustDlg)
-        self.pushButton_5.setObjectName("pushButton_5")
-        self.verticalLayout.addWidget(self.pushButton_5)
+        self.addButton = QtGui.QPushButton(adjustDlg)
+        self.addButton.setObjectName("addButton")
+        self.verticalLayout.addWidget(self.addButton)
+        self.upButton = QtGui.QPushButton(adjustDlg)
+        self.upButton.setObjectName("upButton")
+        self.verticalLayout.addWidget(self.upButton)
+        self.downButton = QtGui.QPushButton(adjustDlg)
+        self.downButton.setObjectName("downButton")
+        self.verticalLayout.addWidget(self.downButton)
+        self.delButton = QtGui.QPushButton(adjustDlg)
+        self.delButton.setObjectName("delButton")
+        self.verticalLayout.addWidget(self.delButton)
+        self.sortButton = QtGui.QPushButton(adjustDlg)
+        self.sortButton.setObjectName("sortButton")
+        self.verticalLayout.addWidget(self.sortButton)
+        self.setDefaultsButton = QtGui.QPushButton(adjustDlg)
+        self.setDefaultsButton.setObjectName("setDefaultsButton")
+        self.verticalLayout.addWidget(self.setDefaultsButton)
         spacerItem = QtGui.QSpacerItem(20, 40, QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Expanding)
         self.verticalLayout.addItem(spacerItem)
         self.horizontalLayout.addLayout(self.verticalLayout)
@@ -58,10 +61,11 @@ class Ui_adjustDlg(object):
 
     def retranslateUi(self, adjustDlg):
         adjustDlg.setWindowTitle(QtGui.QApplication.translate("adjustDlg", "Edit Adjustments", None, QtGui.QApplication.UnicodeUTF8))
-        self.pushButton.setText(QtGui.QApplication.translate("adjustDlg", "Add", None, QtGui.QApplication.UnicodeUTF8))
-        self.pushButton_2.setText(QtGui.QApplication.translate("adjustDlg", "Move Up", None, QtGui.QApplication.UnicodeUTF8))
-        self.pushButton_3.setText(QtGui.QApplication.translate("adjustDlg", "Move Down", None, QtGui.QApplication.UnicodeUTF8))
-        self.pushButton_4.setText(QtGui.QApplication.translate("adjustDlg", "Delete", None, QtGui.QApplication.UnicodeUTF8))
-        self.pushButton_5.setText(QtGui.QApplication.translate("adjustDlg", "Sort", None, QtGui.QApplication.UnicodeUTF8))
+        self.addButton.setText(QtGui.QApplication.translate("adjustDlg", "Add", None, QtGui.QApplication.UnicodeUTF8))
+        self.upButton.setText(QtGui.QApplication.translate("adjustDlg", "Move Up", None, QtGui.QApplication.UnicodeUTF8))
+        self.downButton.setText(QtGui.QApplication.translate("adjustDlg", "Move Down", None, QtGui.QApplication.UnicodeUTF8))
+        self.delButton.setText(QtGui.QApplication.translate("adjustDlg", "Delete", None, QtGui.QApplication.UnicodeUTF8))
+        self.sortButton.setText(QtGui.QApplication.translate("adjustDlg", "Sort", None, QtGui.QApplication.UnicodeUTF8))
+        self.setDefaultsButton.setText(QtGui.QApplication.translate("adjustDlg", "Set Defaults", None, QtGui.QApplication.UnicodeUTF8))
 
 import Betty_rc

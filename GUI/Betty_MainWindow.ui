@@ -10,6 +10,12 @@
     <height>600</height>
    </rect>
   </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
   <property name="windowTitle">
    <string>Betty</string>
   </property>
@@ -18,6 +24,12 @@
     <normaloff>:/Icons/Horse</normaloff>:/Icons/Horse</iconset>
   </property>
   <widget class="QWidget" name="centralwidget">
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
    <layout class="QVBoxLayout" name="verticalLayout_4">
     <item>
      <widget class="QTableView" name="raceTable"/>
@@ -96,6 +108,12 @@
     <layout class="QVBoxLayout" name="verticalLayout_5">
      <item>
       <widget class="QFrame" name="frame">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
        <property name="frameShape">
         <enum>QFrame::StyledPanel</enum>
        </property>
@@ -428,14 +446,14 @@
        </property>
        <layout class="QVBoxLayout" name="verticalLayout_3">
         <item>
-         <widget class="QPushButton" name="pushButton">
+         <widget class="QPushButton" name="editRoundsButton">
           <property name="text">
            <string>Edit Rounds</string>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QPushButton" name="pushButton_2">
+         <widget class="QPushButton" name="editAdjustsButton">
           <property name="text">
            <string>Edit Adjustments</string>
           </property>
@@ -465,9 +483,6 @@
          </widget>
         </item>
        </layout>
-       <zorder>addButton</zorder>
-       <zorder>addButton</zorder>
-       <zorder>deleteButton</zorder>
       </widget>
      </item>
      <item>
@@ -642,8 +657,8 @@
   <tabstop>decimalButton</tabstop>
   <tabstop>betfairButton</tabstop>
   <tabstop>fractionalButton</tabstop>
-  <tabstop>pushButton</tabstop>
-  <tabstop>pushButton_2</tabstop>
+  <tabstop>editRoundsButton</tabstop>
+  <tabstop>editAdjustsButton</tabstop>
   <tabstop>raceTable</tabstop>
  </tabstops>
  <resources>

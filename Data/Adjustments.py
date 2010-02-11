@@ -120,11 +120,11 @@ class Adjustments(object):
 
 
 
-__defaultAdjustments = ["Form", "Course", "Distance"]
+defaultAdjustmentNames = ("Form", "Course", "Distance")
 
 def defaultAdjusts():
     emptyAdjusts = Adjustments()
-    for newAdjust in __defaultAdjustments:
+    for newAdjust in defaultAdjustmentNames:
         emptyAdjusts.addAdjustment(newAdjust)
     return emptyAdjusts
 

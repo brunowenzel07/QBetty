@@ -4,8 +4,10 @@ TODO
 - Spinbox editing of ratings and adjustments: Done 7/2/2010
 - Sensible quitting behaviour: Done 7/2/2010
 - Filename in window title: Done 7/2/2010
-- Allow editing of rounds and adjustments
-- Restore settings on program start
+- Allow editing of rounds : Done 11/2/2010
+- Allow editing of adjustments
+- Save and load default adjusts on close/open
+- Restore settings on program start : Done 11/2/2010
 - Recent files section in File menu
 - Single click editing of race values
 - Printing

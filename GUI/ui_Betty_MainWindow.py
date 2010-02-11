@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'C:\Users\Mike_2\Eclipse workspace\Betty\src\GUI\Betty_MainWindow.ui'
 #
-# Created: Sun Feb 07 22:07:05 2010
+# Created: Thu Feb 11 21:12:07 2010
 #      by: PyQt4 UI code generator 4.7
 #
 # WARNING! All changes made in this file will be lost!
@@ -13,10 +13,20 @@ class Ui_Betty_MainWindow(object):
     def setupUi(self, Betty_MainWindow):
         Betty_MainWindow.setObjectName("Betty_MainWindow")
         Betty_MainWindow.resize(802, 600)
+        sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Expanding)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(Betty_MainWindow.sizePolicy().hasHeightForWidth())
+        Betty_MainWindow.setSizePolicy(sizePolicy)
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap(":/Icons/Horse"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         Betty_MainWindow.setWindowIcon(icon)
         self.centralwidget = QtGui.QWidget(Betty_MainWindow)
+        sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Expanding)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.centralwidget.sizePolicy().hasHeightForWidth())
+        self.centralwidget.setSizePolicy(sizePolicy)
         self.centralwidget.setObjectName("centralwidget")
         self.verticalLayout_4 = QtGui.QVBoxLayout(self.centralwidget)
         self.verticalLayout_4.setObjectName("verticalLayout_4")
@@ -47,6 +57,11 @@ class Ui_Betty_MainWindow(object):
         self.verticalLayout_5 = QtGui.QVBoxLayout(self.dockWidgetContents)
         self.verticalLayout_5.setObjectName("verticalLayout_5")
         self.frame = QtGui.QFrame(self.dockWidgetContents)
+        sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.frame.sizePolicy().hasHeightForWidth())
+        self.frame.setSizePolicy(sizePolicy)
         self.frame.setFrameShape(QtGui.QFrame.StyledPanel)
         self.frame.setFrameShadow(QtGui.QFrame.Sunken)
         self.frame.setObjectName("frame")
@@ -167,12 +182,12 @@ class Ui_Betty_MainWindow(object):
         self.groupBox_3.setObjectName("groupBox_3")
         self.verticalLayout_3 = QtGui.QVBoxLayout(self.groupBox_3)
         self.verticalLayout_3.setObjectName("verticalLayout_3")
-        self.pushButton = QtGui.QPushButton(self.groupBox_3)
-        self.pushButton.setObjectName("pushButton")
-        self.verticalLayout_3.addWidget(self.pushButton)
-        self.pushButton_2 = QtGui.QPushButton(self.groupBox_3)
-        self.pushButton_2.setObjectName("pushButton_2")
-        self.verticalLayout_3.addWidget(self.pushButton_2)
+        self.editRoundsButton = QtGui.QPushButton(self.groupBox_3)
+        self.editRoundsButton.setObjectName("editRoundsButton")
+        self.verticalLayout_3.addWidget(self.editRoundsButton)
+        self.editAdjustsButton = QtGui.QPushButton(self.groupBox_3)
+        self.editAdjustsButton.setObjectName("editAdjustsButton")
+        self.verticalLayout_3.addWidget(self.editAdjustsButton)
         self.verticalLayout_6.addWidget(self.groupBox_3)
         self.groupBox_2 = QtGui.QGroupBox(self.dockWidgetContents_2)
         self.groupBox_2.setObjectName("groupBox_2")
@@ -273,9 +288,9 @@ class Ui_Betty_MainWindow(object):
         Betty_MainWindow.setTabOrder(self.prizeSpinner, self.decimalButton)
         Betty_MainWindow.setTabOrder(self.decimalButton, self.betfairButton)
         Betty_MainWindow.setTabOrder(self.betfairButton, self.fractionalButton)
-        Betty_MainWindow.setTabOrder(self.fractionalButton, self.pushButton)
-        Betty_MainWindow.setTabOrder(self.pushButton, self.pushButton_2)
-        Betty_MainWindow.setTabOrder(self.pushButton_2, self.raceTable)
+        Betty_MainWindow.setTabOrder(self.fractionalButton, self.editRoundsButton)
+        Betty_MainWindow.setTabOrder(self.editRoundsButton, self.editAdjustsButton)
+        Betty_MainWindow.setTabOrder(self.editAdjustsButton, self.raceTable)
 
     def retranslateUi(self, Betty_MainWindow):
         Betty_MainWindow.setWindowTitle(QtGui.QApplication.translate("Betty_MainWindow", "Betty", None, QtGui.QApplication.UnicodeUTF8))
@@ -316,8 +331,8 @@ class Ui_Betty_MainWindow(object):
         self.betfairButton.setText(QtGui.QApplication.translate("Betty_MainWindow", "&Betfair", None, QtGui.QApplication.UnicodeUTF8))
         self.fractionalButton.setText(QtGui.QApplication.translate("Betty_MainWindow", "&Fractional", None, QtGui.QApplication.UnicodeUTF8))
         self.groupBox_3.setTitle(QtGui.QApplication.translate("Betty_MainWindow", "Data Settings", None, QtGui.QApplication.UnicodeUTF8))
-        self.pushButton.setText(QtGui.QApplication.translate("Betty_MainWindow", "Edit Rounds", None, QtGui.QApplication.UnicodeUTF8))
-        self.pushButton_2.setText(QtGui.QApplication.translate("Betty_MainWindow", "Edit Adjustments", None, QtGui.QApplication.UnicodeUTF8))
+        self.editRoundsButton.setText(QtGui.QApplication.translate("Betty_MainWindow", "Edit Rounds", None, QtGui.QApplication.UnicodeUTF8))
+        self.editAdjustsButton.setText(QtGui.QApplication.translate("Betty_MainWindow", "Edit Adjustments", None, QtGui.QApplication.UnicodeUTF8))
         self.groupBox_2.setTitle(QtGui.QApplication.translate("Betty_MainWindow", "Horse Actions", None, QtGui.QApplication.UnicodeUTF8))
         self.addButton.setText(QtGui.QApplication.translate("Betty_MainWindow", "Add", None, QtGui.QApplication.UnicodeUTF8))
         self.deleteButton.setText(QtGui.QApplication.translate("Betty_MainWindow", "Delete", None, QtGui.QApplication.UnicodeUTF8))

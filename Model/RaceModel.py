@@ -11,6 +11,7 @@ from Data.Race import EmptyRace, Race
 from Data.Horse import Horse
 from Model.Chance import Round
 from Model import Chance
+from Data import Adjustments
 
 def makeRaceProperty(attribute):
     def fget(self):
@@ -21,13 +22,19 @@ def makeRaceProperty(attribute):
         return self.race.__setattr__(attribute, value)
     return property(fget, fset)
 
+def setDefaultAdjustments(adjustList):
+    Adjustments.defaultAdjustmentNames = tuple(adjustList)
+
+def getDefaultAdjustments():
+    return tuple(Adjustments.defaultAdjustmentNames)
+
 class RaceModel(QAbstractTableModel):
     '''
     classdocs
     '''
 
 
-    def __init__(self, filename = None):
+    def __init__(self, filename = None, rounds = None):
         '''
         Constructor
         '''
@@ -36,15 +43,16 @@ class RaceModel(QAbstractTableModel):
         self.dirty = False
         self.oddsDisplay = Chance.DecimalOddsDisplay
         self.race = None
-        self.load()
-        self.rounds = [Round(70), Round(), Round(130)]
+        self.rounds = []
         self.__columnMaps = {}
         self.makeColumns("name")
         self.makeColumns("rating")
         self.makeColumns("adjRating")
         self.makeColumns("adjust")
         self.makeColumns("round")
+        self.load()
         self.setColumnMaps()
+        self.setRounds(rounds)
         self.updateOdds()
 
     def __GetDirty(self):
@@ -88,6 +96,7 @@ class RaceModel(QAbstractTableModel):
 
     def __setColumnMap(self, mapName, startCol, iterator):
         total = 0
+        self.__columnMaps[mapName] = {}
         for index in iterator:
             self.__columnMaps[mapName][startCol + total] = index
             total += 1
@@ -259,3 +268,16 @@ class RaceModel(QAbstractTableModel):
             self.dirty = False
             return True
         return False
+
+    def roundSizes(self):
+        return ["%d" % int(round.roundVal) for round in self.rounds]
+
+    def setRounds(self, roundList = None):
+        if roundList is None:
+            self.rounds = [Round(70), Round(), Round(130)]
+        else:
+            self.rounds = [Round(r) for r in roundList]
+        self.setColumnMaps()
+        self.reset()
+
+
