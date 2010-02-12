@@ -76,7 +76,11 @@ class Adjustments(object):
             self.__order.insert(index + 1, adjust)
 
     def reset(self, newAdjustList):
-        pass
+        for oldAdjust in self.__order:
+            if oldAdjust not in newAdjustList and oldAdjust in self.__adjusts:
+                del self.__adjusts[oldAdjust]
+        self.__order = newAdjustList
+
 
     def __str__(self):
         return ",".join(self.__order)

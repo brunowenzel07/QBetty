@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'C:\Users\Mike_2\Eclipse workspace\Betty\src\GUI\addRoundDlg.ui'
 #
-# Created: Thu Feb 11 21:26:45 2010
+# Created: Fri Feb 12 09:14:11 2010
 #      by: PyQt4 UI code generator 4.7
 #
 # WARNING! All changes made in this file will be lost!

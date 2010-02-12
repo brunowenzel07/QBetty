@@ -27,7 +27,7 @@
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
-      <widget class="QListWidget" name="listWidget"/>
+      <widget class="QListWidget" name="adjustListWidget"/>
      </item>
      <item>
       <layout class="QVBoxLayout" name="verticalLayout">
@@ -67,9 +67,9 @@
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="setDefaultsButton">
+        <widget class="QCheckBox" name="checkBox">
          <property name="text">
-          <string>Set Defaults</string>
+          <string>Make Defaults</string>
          </property>
         </widget>
        </item>

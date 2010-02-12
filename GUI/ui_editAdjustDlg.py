@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'C:\Users\Mike_2\Eclipse workspace\Betty\src\GUI\editAdjustDlg.ui'
 #
-# Created: Thu Feb 11 21:12:08 2010
+# Created: Fri Feb 12 09:52:01 2010
 #      by: PyQt4 UI code generator 4.7
 #
 # WARNING! All changes made in this file will be lost!
@@ -21,9 +21,9 @@ class Ui_adjustDlg(object):
         self.verticalLayout_2.setObjectName("verticalLayout_2")
         self.horizontalLayout = QtGui.QHBoxLayout()
         self.horizontalLayout.setObjectName("horizontalLayout")
-        self.listWidget = QtGui.QListWidget(adjustDlg)
-        self.listWidget.setObjectName("listWidget")
-        self.horizontalLayout.addWidget(self.listWidget)
+        self.adjustListWidget = QtGui.QListWidget(adjustDlg)
+        self.adjustListWidget.setObjectName("adjustListWidget")
+        self.horizontalLayout.addWidget(self.adjustListWidget)
         self.verticalLayout = QtGui.QVBoxLayout()
         self.verticalLayout.setObjectName("verticalLayout")
         self.addButton = QtGui.QPushButton(adjustDlg)
@@ -41,9 +41,9 @@ class Ui_adjustDlg(object):
         self.sortButton = QtGui.QPushButton(adjustDlg)
         self.sortButton.setObjectName("sortButton")
         self.verticalLayout.addWidget(self.sortButton)
-        self.setDefaultsButton = QtGui.QPushButton(adjustDlg)
-        self.setDefaultsButton.setObjectName("setDefaultsButton")
-        self.verticalLayout.addWidget(self.setDefaultsButton)
+        self.checkBox = QtGui.QCheckBox(adjustDlg)
+        self.checkBox.setObjectName("checkBox")
+        self.verticalLayout.addWidget(self.checkBox)
         spacerItem = QtGui.QSpacerItem(20, 40, QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Expanding)
         self.verticalLayout.addItem(spacerItem)
         self.horizontalLayout.addLayout(self.verticalLayout)
@@ -66,6 +66,6 @@ class Ui_adjustDlg(object):
         self.downButton.setText(QtGui.QApplication.translate("adjustDlg", "Move Down", None, QtGui.QApplication.UnicodeUTF8))
         self.delButton.setText(QtGui.QApplication.translate("adjustDlg", "Delete", None, QtGui.QApplication.UnicodeUTF8))
         self.sortButton.setText(QtGui.QApplication.translate("adjustDlg", "Sort", None, QtGui.QApplication.UnicodeUTF8))
-        self.setDefaultsButton.setText(QtGui.QApplication.translate("adjustDlg", "Set Defaults", None, QtGui.QApplication.UnicodeUTF8))
+        self.checkBox.setText(QtGui.QApplication.translate("adjustDlg", "Make Defaults", None, QtGui.QApplication.UnicodeUTF8))
 
 import Betty_rc

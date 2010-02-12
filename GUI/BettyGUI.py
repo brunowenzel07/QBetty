@@ -10,11 +10,12 @@ from PyQt4.QtGui import (QMainWindow, QApplication,
 from PyQt4.QtCore import (pyqtSignature, QString, SIGNAL, QFileInfo, QDate, QTime,
                           QSettings, QVariant, QSize, QPoint, QStringList)
 import sys
-from Model.RaceModel import RaceModel, getDefaultAdjustments
+from Model.RaceModel import RaceModel, getDefaultAdjustments, setDefaultAdjustments
 from Model import Chance
-from GUI.RaceDelegate import RaceDelegate
+from RaceDelegate import RaceDelegate
+from editRoundsDlg import editRoundsDlg
+from editAdjustDlg import editAdjustDlg
 import os
-from GUI.editRoundsDlg import editRoundsDlg
 
 appName = "Betty"
 appVersion = "0.1"
@@ -108,7 +109,7 @@ class BettyMain(QMainWindow, Ui_Betty_MainWindow):
         self.model.insertRows(row)
         index = self.model.index(row, 0)
         self.raceTable.setCurrentIndex(index)
-        #self.raceTable.edit(index)
+        self.raceTable.edit(index)
 
     @pyqtSignature("")
     def on_deleteButton_clicked(self):
@@ -210,6 +211,16 @@ class BettyMain(QMainWindow, Ui_Betty_MainWindow):
         dlg = editRoundsDlg(self.model, self)
         if dlg.exec_():
             self.model.setRounds(dlg.getRounds())
+            self.reset()
+
+    @pyqtSignature("")
+    def on_editAdjustsButton_clicked(self):
+        dlg = editAdjustDlg(self.model)
+        if dlg.exec_():
+            self.model.setAdjustNames(dlg.getAdjusts())
+            if dlg.makeDefault():
+                setDefaultAdjustments(dlg.getAdjusts())
+            self.reset()
 
     def okToContinue(self):
         if not self.model.dirty:

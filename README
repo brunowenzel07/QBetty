@@ -5,8 +5,9 @@ TODO
 - Sensible quitting behaviour: Done 7/2/2010
 - Filename in window title: Done 7/2/2010
 - Allow editing of rounds : Done 11/2/2010
-- Allow editing of adjustments
+- Allow editing of adjustments : Done 12/2/2010
 - Save and load default adjusts on close/open
+- Add "Load Defaults" option to edjustment editing
 - Restore settings on program start : Done 11/2/2010
 - Recent files section in File menu
 - Single click editing of race values
@@ -18,3 +19,6 @@ TODO
 - Fractional odds display
 - Help menu with version number
 - Italic display of non-editable data
+- Right-click to delete or sort round columns
+- Toggle display of adjusted ratings columns
+- Allow non-runner status

@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'C:\Users\Mike_2\Eclipse workspace\Betty\src\GUI\Betty_MainWindow.ui'
 #
-# Created: Thu Feb 11 21:12:07 2010
+# Created: Fri Feb 12 09:59:04 2010
 #      by: PyQt4 UI code generator 4.7
 #
 # WARNING! All changes made in this file will be lost!
@@ -186,6 +186,7 @@ class Ui_Betty_MainWindow(object):
         self.editRoundsButton.setObjectName("editRoundsButton")
         self.verticalLayout_3.addWidget(self.editRoundsButton)
         self.editAdjustsButton = QtGui.QPushButton(self.groupBox_3)
+        self.editAdjustsButton.setEnabled(True)
         self.editAdjustsButton.setObjectName("editAdjustsButton")
         self.verticalLayout_3.addWidget(self.editAdjustsButton)
         self.verticalLayout_6.addWidget(self.groupBox_3)
@@ -220,6 +221,7 @@ class Ui_Betty_MainWindow(object):
         self.actionSave.setIcon(icon3)
         self.actionSave.setObjectName("actionSave")
         self.actionDownload = QtGui.QAction(Betty_MainWindow)
+        self.actionDownload.setEnabled(False)
         icon4 = QtGui.QIcon()
         icon4.addPixmap(QtGui.QPixmap(":/Icons/Web"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.actionDownload.setIcon(icon4)
@@ -238,6 +240,7 @@ class Ui_Betty_MainWindow(object):
         self.actionSave_As.setIcon(icon6)
         self.actionSave_As.setObjectName("actionSave_As")
         self.actionPrint = QtGui.QAction(Betty_MainWindow)
+        self.actionPrint.setEnabled(False)
         icon7 = QtGui.QIcon()
         icon7.addPixmap(QtGui.QPixmap(":/Icons/Print"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.actionPrint.setIcon(icon7)
@@ -247,13 +250,14 @@ class Ui_Betty_MainWindow(object):
         self.actionAbout.setObjectName("actionAbout")
         self.menuFile.addAction(self.actionNew)
         self.menuFile.addAction(self.actionOpen)
+        self.menuFile.addAction(self.actionRecent_Files)
+        self.menuFile.addAction(self.actionDownload)
         self.menuFile.addSeparator()
         self.menuFile.addAction(self.actionSave)
         self.menuFile.addAction(self.actionSave_As)
         self.menuFile.addSeparator()
-        self.menuFile.addAction(self.actionDownload)
         self.menuFile.addSeparator()
-        self.menuFile.addAction(self.actionRecent_Files)
+        self.menuFile.addAction(self.actionPrint)
         self.menuFile.addSeparator()
         self.menuFile.addAction(self.actionQuit)
         self.menuHelp.addAction(self.actionAbout)

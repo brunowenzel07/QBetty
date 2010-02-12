@@ -5,7 +5,7 @@ Created on 2 Feb 2010
 
 '''
 
-from PyQt4.Qt import QAbstractTableModel, QModelIndex, QVariant
+from PyQt4.QtCore import QAbstractTableModel, QModelIndex, QVariant
 from PyQt4.QtCore import Qt, SIGNAL
 from Data.Race import EmptyRace, Race
 from Data.Horse import Horse
@@ -277,6 +277,14 @@ class RaceModel(QAbstractTableModel):
             self.rounds = [Round(70), Round(), Round(130)]
         else:
             self.rounds = [Round(r) for r in roundList]
+        self.setColumnMaps()
+        self.reset()
+
+    def getAdjustNames(self):
+        return tuple([a for a in self.race.adjusts])
+
+    def setAdjustNames(self, adjustList):
+        self.race.adjusts.reset(adjustList)
         self.setColumnMaps()
         self.reset()
 
