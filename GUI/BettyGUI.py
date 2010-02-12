@@ -18,7 +18,7 @@ from editAdjustDlg import editAdjustDlg
 import os
 
 appName = "Betty"
-appVersion = "0.1"
+appVersion = "0.2"
 
 def setCombo(combo, itemText):
     itemList = [unicode(combo.itemText(i)) for
