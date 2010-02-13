@@ -8,7 +8,7 @@ from ui_Betty_MainWindow import Ui_Betty_MainWindow
 from PyQt4.QtGui import (QMainWindow, QApplication,
                          QMessageBox, QFileDialog)
 from PyQt4.QtCore import (pyqtSignature, QString, SIGNAL, QFileInfo, QDate, QTime,
-                          QSettings, QVariant, QSize, QPoint, QStringList)
+                          QSettings, QVariant, QSize, QPoint, QStringList, Qt)
 import sys
 from Model.RaceModel import RaceModel, getDefaultAdjustments, setDefaultAdjustments
 from Model import Chance
@@ -60,6 +60,7 @@ class BettyMain(QMainWindow, Ui_Betty_MainWindow):
         self.model = RaceModel(filename, rounds = rounds)
         self.setupUi(self)
         self.deleteButton.setEnabled(False)
+        self.raceTable.setGridStyle(Qt.NoPen)
         self.raceTable.setModel(self.model)
         self.raceTable.setItemDelegate(RaceDelegate(self))
         self.connect(self.model, SIGNAL("rowsInserted(QModelIndex,int,int)"),
@@ -196,7 +197,7 @@ class BettyMain(QMainWindow, Ui_Betty_MainWindow):
         self.fileSave()
 
     @pyqtSignature("")
-    def on_actionSaveAs_triggered(self):
+    def on_actionSave_As_triggered(self):
         self.fileSaveAs()
 
     @pyqtSignature("")
@@ -252,6 +253,7 @@ class BettyMain(QMainWindow, Ui_Betty_MainWindow):
 
     def fileSaveAs(self):
         path = QFileInfo(self.model.filename).path() if self.model.filename is not None else "."
+        print path
         filename = QFileDialog.getSaveFileName(self,
                                                "Betty - Save Race As",
                                                path,

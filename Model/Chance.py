@@ -35,7 +35,8 @@ class BetfairOddsDisplay(object):
         elif prob > 1:
             return "0.00"
         else:
-            return "%0.2f" % (1 + ((1 - prob) / prob))
+            odds = (1 + ((1 - prob) / prob))
+            return "%0.*f" % (numDecimals(odds), odds)
 
 class FractionalOddsDisplay(object):
     @classmethod

@@ -58,5 +58,8 @@ class RaceDelegate(QItemDelegate):
         elif model.isColumn("rating", index):
             ratingIndex = model.getColumn("rating", index)
             editor.setValue(horse[ratingIndex])
+        elif model.isColumn("adjust", index):
+            adjustIndex = model.getColumn("adjust", index)
+            editor.setValue(model.race.adjusts.getAdjust(model.race.adjusts[adjustIndex], horse))
         else:
             QItemDelegate.setEditorData(self, editor, index)
