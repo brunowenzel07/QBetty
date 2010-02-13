@@ -44,11 +44,15 @@ class BettyMain(QMainWindow, Ui_Betty_MainWindow):
         settings = QSettings()
         self.recentFiles = settings.value("RecentFiles").toStringList()
         filename = unicode(settings.value("LastFile").toString())
+        if len(filename) == 0:
+            filename = None
         size = settings.value("MainWindow/Size", QVariant(QSize(100, 500))).toSize()
         pos = settings.value("MainWindow/Position",
                            QVariant(QPoint(100, 100))).toPoint()
         state = settings.value("MainWindow/State").toByteArray()
         rounds = settings.value("Rounds").toStringList()
+        adjusts = settings.value("DefaultAdjusts").toStringList()
+        setDefaultAdjustments([unicode(a) for a in adjusts])
         if len(rounds) > 0:
             rounds = [ int(unicode(r)) for r in rounds ]
         else:

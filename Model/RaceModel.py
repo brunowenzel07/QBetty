@@ -253,8 +253,10 @@ class RaceModel(QAbstractTableModel):
 
     def newRace(self):
         self.race = EmptyRace()
+        self.setColumnMaps()
         self.reset()
         self.updateOdds()
+        self.filename = None
         self.dirty = False
 
 
@@ -287,5 +289,6 @@ class RaceModel(QAbstractTableModel):
         self.race.adjusts.reset(adjustList)
         self.setColumnMaps()
         self.reset()
+        self.dirty = True
 
 
