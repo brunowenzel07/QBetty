@@ -51,7 +51,7 @@ class Horse(object):
 
     def getXMLTree(self, doc):
         top = doc.createElement("horse")
-        for tag, tagType in self.__tags:
+        for tag in (t[0] for t in self.__tags):
             node = doc.createElement(tag)
             top.appendChild(node)
             value = self.__getattribute__(tag)

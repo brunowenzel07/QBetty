@@ -7,7 +7,7 @@ Created on 2 Feb 2010
 
 from PyQt4.QtCore import QAbstractTableModel, QModelIndex, QVariant
 from PyQt4.QtCore import Qt, SIGNAL
-from Data.Race import EmptyRace, Race
+from Data.Race import emptyRace, Race
 from Data.Horse import Horse
 from Model.Chance import Round
 from Model import Chance
@@ -55,14 +55,15 @@ class RaceModel(QAbstractTableModel):
         self.setRounds(rounds)
         self.updateOdds()
 
-    def __GetDirty(self):
+    def __getDirty(self):
         return self.__dirty
 
-    def __SetDirty(self, value):
+    def __setDirty(self, value):
         self.__dirty = value
         self.emit(SIGNAL("dirtied"))
 
-    dirty = property(__GetDirty, __SetDirty, None, "dirty's docstring")
+    dirty = property(__getDirty, __setDirty, None,
+                     "Boolean indicating that data has changed since saving.")
 
     racename = makeRaceProperty("name")
     raceclass = makeRaceProperty("raceClass")
@@ -106,16 +107,21 @@ class RaceModel(QAbstractTableModel):
         for colMap in self.__columnMaps:
             self.__columnMaps[colMap] = {}
         column = self.__setColumnMap("name", 0, xrange(0, 1))
-        column += self.__setColumnMap("rating", column, xrange(0, Horse.numRatings))
-        column += self.__setColumnMap("adjust", column, xrange(0, len(self.race.adjusts)))
-        column += self.__setColumnMap("adjRating", column, xrange(0, Horse.numRatings))
-        column += self.__setColumnMap("round", column, xrange(0, len(self.rounds)))
+        column += self.__setColumnMap("rating", column,
+                                      xrange(0, Horse.numRatings))
+        column += self.__setColumnMap("adjust", column,
+                                      xrange(0, len(self.race.adjusts)))
+        column += self.__setColumnMap("adjRating", column,
+                                      xrange(0, Horse.numRatings))
+        column += self.__setColumnMap("round", column,
+                                      xrange(0, len(self.rounds)))
 
-    def rowCount(self, index = QModelIndex()):
+    def rowCount(self, index = QModelIndex()): #@UnusedVariable
         return len(self.race)
 
     def columnCount(self, index = QModelIndex()): #@UnusedVariable
-        return len(self.race.adjusts) + (Horse.numRatings * 2) + 1 + len(self.rounds)
+        return int(len(self.race.adjusts) +
+                   (Horse.numRatings * 2) + 1 + len(self.rounds))
 
     def data(self, index, role = Qt.DisplayRole):
         if (not index.isValid() or
@@ -124,20 +130,24 @@ class RaceModel(QAbstractTableModel):
         horse = self.race[index.row()]
         column = index.column()
         if role == Qt.DisplayRole:
+            retVal = QVariant()
             if self.isColumn("name", column):
-                return QVariant(horse.name)
+                retVal = QVariant(horse.name)
             elif self.isColumn("rating", column):
-                return QVariant(horse[self.getColumn("rating", column)])
+                retVal = QVariant(horse[self.getColumn("rating", column)])
             elif self.isColumn("adjust", column):
                 index = self.getColumn("adjust", column)
-                return QVariant(self.race.adjusts.getAdjust(self.race.adjusts[index],
-                                                             horse))
+                adjust = self.race.adjusts[index]
+                retVal = QVariant(self.race.adjusts.getAdjust(adjust, horse))
             elif self.isColumn("adjRating", column):
                 index = self.getColumn("adjRating", column)
-                return QVariant(self.race.adjusts.getAdjustedRating(horse, index))
+                rating = self.race.adjusts.getAdjustedRating(horse, index)
+                retVal = QVariant(rating)
             elif self.isColumn("round", column):
                 index = self.getColumn("round", column)
-                return QVariant(self.oddsDisplay.display(self.rounds[index].convert(horse.prob)))
+                odds = self.rounds[index].convert(horse.prob)
+                retVal = QVariant(self.oddsDisplay.display(odds))
+            return retVal
         elif role == Qt.TextAlignmentRole:
             if self.isColumn("name", column):
                 return QVariant(int(Qt.AlignLeft | Qt.AlignVCenter))
@@ -146,26 +156,25 @@ class RaceModel(QAbstractTableModel):
         return QVariant()
 
     def headerData(self, section, orientation, role = Qt.DisplayRole):
-        if role != Qt.DisplayRole:
-            return QVariant()
+        retVal = QVariant()
         if orientation == Qt.Horizontal:
             if self.isColumn("name", section):
-                return QVariant("Horse name")
+                retVal = QVariant("Horse name")
             elif self.isColumn("rating", section):
                 index = self.getColumn("rating", section)
-                return QVariant(Horse.ratingTitles[index])
+                retVal = QVariant(Horse.ratingTitles[index])
             elif self.isColumn("adjust", section):
                 index = self.getColumn("adjust", section)
-                return QVariant(self.race.adjusts[index])
+                retVal = QVariant(self.race.adjusts[index])
             elif self.isColumn("adjRating", section):
                 index = self.getColumn("adjRating", section)
-                return QVariant("Adjusted\n" + Horse.ratingTitles[index])
+                retVal = QVariant("Adjusted\n" + Horse.ratingTitles[index])
             elif self.isColumn("round", section):
                 index = self.getColumn("round", section)
-                return QVariant("%d%%" % self.rounds[index].roundVal)
+                retVal = QVariant("%d%%" % self.rounds[index].roundVal)
             else:
-                return QVariant(int(section + 1))
-        return QVariant()
+                retVal = QVariant(int(section + 1))
+        return retVal
 
     def updateOdds(self):
         self.race.calculate()
@@ -237,7 +246,7 @@ class RaceModel(QAbstractTableModel):
                 self.race = oldrace
                 self.filename = oldfile
                 if oldrace is None:
-                    self.race = EmptyRace()
+                    self.race = emptyRace()
                 return False
             self.setColumnMaps()
             self.reset()
@@ -245,14 +254,14 @@ class RaceModel(QAbstractTableModel):
             self.dirty = False
             return True
         else:
-            self.race = EmptyRace()
+            self.race = emptyRace()
             self.reset()
             self.updateOdds()
             self.dirty = False
             return False
 
     def newRace(self):
-        self.race = EmptyRace()
+        self.race = emptyRace()
         self.setColumnMaps()
         self.reset()
         self.updateOdds()
@@ -272,7 +281,7 @@ class RaceModel(QAbstractTableModel):
         return False
 
     def roundSizes(self):
-        return ["%d" % int(round.roundVal) for round in self.rounds]
+        return ["%d" % int(thisRound.roundVal) for thisRound in self.rounds]
 
     def setRounds(self, roundList = None):
         if roundList is None:

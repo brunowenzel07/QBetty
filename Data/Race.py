@@ -16,7 +16,8 @@ class Race(object):
                  141, 111, 80, 66, 50, 40, 33, 30, 20, 10, 1)
     __siglen = len(__sigmoid) - 1
     __tags = (("name", unicode), ("raceClass", unicode), ("course", unicode),
-              ("distance", int), ("date", unicode), ("time", unicode), ("prize", int))
+              ("distance", int), ("date", unicode),
+              ("time", unicode), ("prize", int))
 
     def __init__(self):
         '''
@@ -63,13 +64,16 @@ class Race(object):
         adj = {}
         for horse in self:
             adj[horse] = []
-            adj[horse].extend((rating for rname, rating in self.adjusts.iterAdjustedRatings(horse)))
-        maxRatings = [max((adj[horse][i] for horse in self)) for i in xrange(0, Horse.numRatings)]
+            adj[horse].extend((rating for rname, rating
+                               in self.adjusts.iterAdjustedRatings(horse)))
+        maxRatings = [max((adj[horse][i] for horse in self))
+                      for i in xrange(0, Horse.numRatings)]
         minTrail = {}
         weight = {}
         totalWeight = 0
         for horse in self:
-            minTrail[horse] = min((maxRatings[i] - adj[horse][i] for i in xrange(0, Horse.numRatings)))
+            minTrail[horse] = min((maxRatings[i] - adj[horse][i]
+                                   for i in xrange(0, Horse.numRatings)))
             weight[horse] = self.sigmoid(minTrail[horse])
             totalWeight += weight[horse]
         for horse in self:
@@ -88,7 +92,7 @@ class Race(object):
     def save(self, target):
         if isinstance(target, basestring):
             try: target = open(target, "w")
-            except:
+            except OSError:
                 return False
         if not isinstance(target, file):
             return False
@@ -99,11 +103,10 @@ class Race(object):
     def load(self, target):
         if isinstance(target, basestring):
             try: target = open(target, "r")
-            except:
+            except OSError:
                 return False
         if not isinstance(target, file):
             return False
-        #return False
         import xml.dom.minidom
         doc = xml.dom.minidom.parse(target)
         top = doc.documentElement
@@ -118,10 +121,16 @@ class Race(object):
             self.adjusts.readXMLTree(node)
         for node in doc.getElementsByTagName("horseList"):
             for horseNode in doc.getElementsByTagName("horse"):
-                try: horseId = int(horseNode.getElementsByTagName("id").firstChild.nodeValue)
-                except: horseId = None
-                try: name = unicode(horseNode.getElementsByTagName("id").firstChild.nodeValue)
-                except: name = None
+                try:
+                    idNode = horseNode.getElementsByTagName("id").firstChild
+                    horseId = int(idNode.nodeValue)
+                except AttributeError:
+                    horseId = None
+                try:
+                    nameNode = horseNode.getElementsByTagName("name").firstChild
+                    name = unicode(nameNode.nodeValue)
+                except AttributeError:
+                    name = None
                 horse = self.addHorse(Horse(horseId, name))
                 horse.readXMLTree(horseNode)
                 self.adjusts.readHorseXMLTree(horse, horseNode)
@@ -133,7 +142,7 @@ class Race(object):
         impl = xml.dom.minidom.getDOMImplementation()
         doc = impl.createDocument(None, "race", None)
         top = doc.documentElement
-        for tag, tagType in self.__tags:
+        for tag in (t[0] for t in self.__tags):
             node = doc.createElement(tag)
             top.appendChild(node)
             value = self.__getattribute__(tag)
@@ -150,18 +159,18 @@ class Race(object):
         return doc
 
 
-def EmptyRace():
-    emptyRace = Race()
-    emptyRace.addHorse()
-    emptyRace.addHorse()
-    emptyRace.adjusts = defaultAdjusts()
-    return emptyRace
+def emptyRace():
+    empty = Race()
+    empty.addHorse()
+    empty.addHorse()
+    empty.adjusts = defaultAdjusts()
+    return empty
 
 if __name__ == "__main__":
-    race = EmptyRace()
+    race = emptyRace()
     race.adjusts.setAdjust(0, race[0], 3)
-    d = race.getXML()
-    print d.toprettyxml()
+    raceDoc = race.getXML()
+    print raceDoc.toprettyxml()
     race = Race()
     print race.load(r"..\GUI\test.bty")
     print race.name

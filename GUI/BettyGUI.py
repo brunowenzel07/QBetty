@@ -7,10 +7,12 @@ Created on 1 Feb 2010
 from ui_Betty_MainWindow import Ui_Betty_MainWindow
 from PyQt4.QtGui import (QMainWindow, QApplication,
                          QMessageBox, QFileDialog)
-from PyQt4.QtCore import (pyqtSignature, QString, SIGNAL, QFileInfo, QDate, QTime,
-                          QSettings, QVariant, QSize, QPoint, QStringList, Qt)
+from PyQt4.QtCore import (pyqtSignature, QString, SIGNAL, QFileInfo, QDate,
+                          QTime, QSettings, QVariant, QSize, QPoint,
+                          QStringList, Qt)
 import sys
-from Model.RaceModel import RaceModel, getDefaultAdjustments, setDefaultAdjustments
+from Model.RaceModel import (RaceModel,
+                             getDefaultAdjustments, setDefaultAdjustments)
 from Model import Chance
 from RaceDelegate import RaceDelegate
 from editRoundsDlg import editRoundsDlg
@@ -46,13 +48,15 @@ class BettyMain(QMainWindow, Ui_Betty_MainWindow):
         filename = unicode(settings.value("LastFile").toString())
         if len(filename) == 0:
             filename = None
-        size = settings.value("MainWindow/Size", QVariant(QSize(100, 500))).toSize()
+        size = settings.value("MainWindow/Size",
+                              QVariant(QSize(100, 500))).toSize()
         pos = settings.value("MainWindow/Position",
                            QVariant(QPoint(100, 100))).toPoint()
         state = settings.value("MainWindow/State").toByteArray()
         rounds = settings.value("Rounds").toStringList()
         adjusts = settings.value("DefaultAdjusts").toStringList()
-        setDefaultAdjustments([unicode(a) for a in adjusts])
+        if len(adjusts) > 0:
+            setDefaultAdjustments([unicode(a) for a in adjusts])
         if len(rounds) > 0:
             rounds = [ int(unicode(r)) for r in rounds ]
         else:
@@ -80,8 +84,9 @@ class BettyMain(QMainWindow, Ui_Betty_MainWindow):
         if self.model.filename is None:
             self.setWindowTitle("%s v%s - Unnamed[*]" % (appName, appVersion))
         else:
-            self.setWindowTitle("%s v%s - %s[*]" % (appName, appVersion,
-                                                    os.path.basename(self.model.filename)))
+            self.setWindowTitle("%s v%s - %s[*]" %
+                                (appName, appVersion,
+                                 os.path.basename(self.model.filename)))
         self.setWindowModified(self.model.dirty)
 
     def dirtied(self):
@@ -123,9 +128,10 @@ class BettyMain(QMainWindow, Ui_Betty_MainWindow):
             return
         row = index.row()
         name = self.model.data(self.model.index(row, 0)).toString()
-        if QMessageBox.question(self, "Remove Horse",
-                                QString("Remove horse %1").arg(name),
-                                QMessageBox.Yes | QMessageBox.No) == QMessageBox.No:
+        answer = QMessageBox.question(self, "Remove Horse",
+                                      QString("Remove horse %1").arg(name),
+                                      QMessageBox.Yes | QMessageBox.No)
+        if answer == QMessageBox.No:
             return
         self.model.removeRows(row)
         self.resizeColumns()
@@ -167,7 +173,8 @@ class BettyMain(QMainWindow, Ui_Betty_MainWindow):
         self.model.distance = self.calculateDistance()
 
     def calculateDistance(self):
-        return int(self.milesSpinner.value()) * 8 + self.furlongCombo.currentIndex()
+        return int(self.milesSpinner.value() * 8
+                   + self.furlongCombo.currentIndex())
 
     @pyqtSignature("QString")
     def on_classCombo_editTextChanged(self, text):
@@ -232,7 +239,8 @@ class BettyMain(QMainWindow, Ui_Betty_MainWindow):
             return True
         reply = QMessageBox.question(self, "Betty - Unsaved Changes",
                                      "Save unsaved changes?",
-                                     buttons = QMessageBox.Yes | QMessageBox.No | QMessageBox.Cancel,
+                                     buttons = QMessageBox.Yes |
+                                     QMessageBox.No | QMessageBox.Cancel,
                                      defaultButton = QMessageBox.Yes)
         if reply == QMessageBox.Cancel:
             return False
@@ -247,17 +255,20 @@ class BettyMain(QMainWindow, Ui_Betty_MainWindow):
             return self.fileSaveAs()
         else:
             if not self.model.save(filename):
-                QMessageBox.warning(self, "File Error", "Could not save %s" % filename)
+                QMessageBox.warning(self, "File Error",
+                                    "Could not save %s" % filename)
                 return False
             return True
 
     def fileSaveAs(self):
-        path = QFileInfo(self.model.filename).path() if self.model.filename is not None else "."
-        print path
+        path = "."
+        if self.model.filename is not None:
+            path = QFileInfo(self.model.filename).path()
+        extensionName = "Betty files (%s)" % self.__formatExtension
         filename = QFileDialog.getSaveFileName(self,
                                                "Betty - Save Race As",
                                                path,
-                                               "Betty files (%s)" % self.__formatExtension)
+                                               extensionName)
         if not filename.isEmpty():
             if not filename.contains("."):
                 filename += self.__formatExtension
@@ -269,15 +280,17 @@ class BettyMain(QMainWindow, Ui_Betty_MainWindow):
         if not self.okToContinue():
             return
         path = QFileInfo(filename).path() if filename is not None else "."
+        extensionName = "Betty files (%s)" % self.__formatExtension
         filename = QFileDialog.getOpenFileName(self,
                                                "Betty - Load Race",
                                                path,
-                                               "Betty files (%s)" % self.__formatExtension)
+                                               extensionName)
         if not filename.isEmpty():
             if self.model.load(unicode(filename)):
                 self.reset()
             else:
-                QMessageBox.warning(self, "File Error", "Could not load %s" % filename)
+                QMessageBox.warning(self, "File Error",
+                                    "Could not load %s" % filename)
 
     def check_deleteButton(self):
         if(self.model.rowCount() > 2):
@@ -291,10 +304,14 @@ class BettyMain(QMainWindow, Ui_Betty_MainWindow):
             settings.setValue("MainWindow/Size", QVariant(self.size()))
             settings.setValue("MainWindow/Position", QVariant(self.pos()))
             settings.setValue("MainWindow/State", QVariant(self.saveState()))
-            filename = QVariant(QString(self.model.filename)) if self.model.filename is not None else QVariant()
+            filename = QVariant()
+            if self.model.filename is not None:
+                filename = QVariant(QString(self.model.filename))
             settings.setValue("LastFile", filename)
-            settings.setValue("Rounds", QVariant(QStringList(self.model.roundSizes())))
-            settings.setValue("DefaultAdjusts", QVariant(QStringList(getDefaultAdjustments())))
+            settings.setValue("Rounds",
+                              QVariant(QStringList(self.model.roundSizes())))
+            settings.setValue("DefaultAdjusts",
+                              QVariant(QStringList(getDefaultAdjustments())))
         else:
             event.ignore()
 
