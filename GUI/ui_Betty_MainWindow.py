@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'C:\Users\Mike_2\Eclipse workspace\Betty\src\GUI\Betty_MainWindow.ui'
 #
-# Created: Fri Feb 12 09:59:04 2010
+# Created: Tue Mar 02 01:28:35 2010
 #      by: PyQt4 UI code generator 4.7
 #
 # WARNING! All changes made in this file will be lost!
@@ -31,6 +31,7 @@ class Ui_Betty_MainWindow(object):
         self.verticalLayout_4 = QtGui.QVBoxLayout(self.centralwidget)
         self.verticalLayout_4.setObjectName("verticalLayout_4")
         self.raceTable = QtGui.QTableView(self.centralwidget)
+        self.raceTable.setEditTriggers(QtGui.QAbstractItemView.AllEditTriggers)
         self.raceTable.setObjectName("raceTable")
         self.verticalLayout_4.addWidget(self.raceTable)
         Betty_MainWindow.setCentralWidget(self.centralwidget)
