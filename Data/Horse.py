@@ -28,6 +28,12 @@ class Horse(object):
                 self.__setattr__(rname, 100)
         self.prob = None
 
+    def __str__(self):
+        ret = str(self.name)
+        for rname in self.__ratingMap:
+            ret += ",%d" % self.__getattribute__(rname)
+        return ret
+
     @classmethod
     def __newId(cls, horseId):
         if horseId is None:

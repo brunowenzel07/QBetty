@@ -39,6 +39,11 @@ class Race(object):
     def __iter__(self):
         for h in self.horses: yield h
 
+    def __str__(self):
+        return "%s,%s,%s,%s,%d,%s,%d" % (self.course, self.date, self.time,
+                                         self.name, self.distance,
+                                         self.raceClass, self.prize)
+
     def addHorse(self, horse = None):
         if horse is None: horse = Horse()
         self.horses.append(horse)
