@@ -36,7 +36,36 @@ class BetfairOddsDisplay(object):
             return "0.00"
         else:
             odds = (1 + ((1 - prob) / prob))
-            return "%0.*f" % (numDecimals(odds), odds)
+            numDecimals = 0
+            if odds <= 2:
+                mult = 100
+                numDecimals = 2
+            elif odds <= 3:
+                mult = 50
+                numDecimals = 2
+            elif odds <= 4:
+                mult = 20
+                numDecimals = 2
+            elif odds <= 6:
+                mult = 10
+                numDecimals = 1
+            elif odds <= 10:
+                mult = 5
+                numDecimals = 1
+            elif odds <= 20:
+                mult = 2
+                numDecimals = 1
+            elif odds <= 30:
+                mult = 1
+                numDecimals = 0
+            elif odds <= 50:
+                mult = 0.5
+            elif odds <= 100:
+                mult = 0.2
+            else:
+                mult = 0.1
+            odds = int((odds * mult) + 0.5) / float(mult)
+            return "%0.*f" % (numDecimals, odds)
 
 class FractionalOddsDisplay(object):
     @classmethod
