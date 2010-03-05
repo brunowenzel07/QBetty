@@ -7,6 +7,7 @@ Created on 2 Feb 2010
 
 from PyQt4.QtCore import QAbstractTableModel, QModelIndex, QVariant
 from PyQt4.QtCore import Qt, SIGNAL
+from PyQt4.QtGui import QFont
 from Data.Race import emptyRace, Race
 from Data.Horse import Horse
 from Model.Chance import Round
@@ -153,11 +154,19 @@ class RaceModel(QAbstractTableModel):
                 return QVariant(int(Qt.AlignLeft | Qt.AlignVCenter))
             else:
                 return QVariant(int(Qt.AlignRight | Qt.AlignVCenter))
+        elif role == Qt.FontRole:
+            if self.isColumn("round", column) or self.isColumn("adjRating", column):
+                font = QFont()
+                font.setBold(True)
+                return QVariant(font)
+            else:
+                return QVariant()
         return QVariant()
 
     def headerData(self, section, orientation, role = Qt.DisplayRole):
         retVal = QVariant()
         if orientation == Qt.Horizontal:
+            print "Horizontal"
             if self.isColumn("name", section):
                 retVal = QVariant("Horse name")
             elif self.isColumn("rating", section):
@@ -172,8 +181,8 @@ class RaceModel(QAbstractTableModel):
             elif self.isColumn("round", section):
                 index = self.getColumn("round", section)
                 retVal = QVariant("%d%%" % self.rounds[index].roundVal)
-            else:
-                retVal = QVariant(int(section + 1))
+        else:
+            retVal = QVariant(int(section + 1))
         return retVal
 
     def updateOdds(self):

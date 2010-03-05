@@ -4,31 +4,37 @@ To run Betty you will need Python 2.6 and PyQt4.4 or greater installed.
 These can be freely downloaded from the internet.
 
 TODO
-- Spinbox editing of ratings and adjustments: Done 7/2/2010
-- Sensible quitting behaviour: Done 7/2/2010
-- Filename in window title: Done 7/2/2010
-- Allow editing of rounds : Done 11/2/2010
-- Allow editing of adjustments : Done 12/2/2010
-- Save and load default adjusts on close/open : Done 13/2/2010
+- Parsing of RP meeting web pages
+- Parsing of RP card web pages
+- Downloading of RP web pages
+- GUI for downloading RP races
 - Add "Load Defaults" option to adjustment editing
-- Restore settings on program start : Done 11/2/2010
-- Bug with no adjustments on first open : Done 14/2/2010
 - Proper list of racecourses in combo box
 - Race Notes
 - Bet notes
 - Recent files section in File menu
-- Single click editing of race values : Done 2/3/2010
 - Printing
 - Print session
-- Downloading race information
 - Wizards for adding horses
 - Better rounding of odds
 - Correct Betfair odds display
 - Fractional odds display
-- Help menu with version number
 - Italic display of non-editable data
 - Right-click to delete or sort round columns
 - Toggle display of adjusted ratings columns
 - Allow non-runner status
 - Save any new racecourses into settings, and repopulate combo on open. Similarly for race class.
 - Remember odds setting.
+
+DONE
+- Parsing of RP race webpage : Done 5/2/2010
+- Single click editing of race values : Done 2/3/2010
+- Bug with no adjustments on first open : Done 14/2/2010
+- Save and load default adjusts on close/open : Done 13/2/2010
+- Allow editing of adjustments : Done 12/2/2010
+- Help menu with version number : Done 12/2/2010
+- Allow editing of rounds : Done 11/2/2010
+- Restore settings on program start : Done 11/2/2010
+- Spinbox editing of ratings and adjustments: Done 7/2/2010
+- Sensible quitting behaviour: Done 7/2/2010
+- Filename in window title: Done 7/2/2010
