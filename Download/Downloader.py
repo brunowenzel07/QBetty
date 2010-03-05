@@ -7,6 +7,7 @@ Created on 5 Mar 2010
 
 from BeautifulSoup import BeautifulSoup
 import re
+import json
 from Data import Race
 
 def parseRaceHTML(raceHandle):
@@ -54,7 +55,7 @@ def parseRaceHTML(raceHandle):
             horseData = re.sub(".*?({.*}).*", r"\1", line)
         elif dateFinder.search(line):
             race.date = dateFinder.search(line).group(1)
-    horseData = eval(horseData)
+    horseData = json.loads(horseData)
     horseData = dict([(int(horseData[h]["no"]), horseData[h]) for h in horseData])
     horseNumbers = horseData.keys()
     horseNumbers.sort()
@@ -73,7 +74,7 @@ def parseRaceHTML(raceHandle):
     return race
 
 if __name__ == "__main__":
-    race = parseRaceHTML(open("testdata/race2.html"))
+    race = parseRaceHTML(open("testdata/race.html"))
     print race
     for raceHorse in race:
         print raceHorse
