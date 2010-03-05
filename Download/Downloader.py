@@ -16,6 +16,7 @@ def parseRaceHTML(raceHandle):
     # Get race course
     headline = soup.find("h1", {"class":"cardHeadline"})
     race.course = headline.contents[-1].strip()
+    race.course = race.course.lower().capitalize()
     # Get race time
     raceDetails = headline.find(attrs = {"class":"navRace"})
     race.time = raceDetails.find(text = re.compile(r"\d+:\d+"))
@@ -36,7 +37,7 @@ def parseRaceHTML(raceHandle):
     classText = raceDetails.find(text = re.compile(r"Class", re.I))
     classMatch = re.search(r"(Class \d+)", classText, re.I)
     if classMatch:
-        race.raceClass = classMatch.group(1)
+        race.raceClass = classMatch.group(1).lower().capitalize()
     # Get race prize
     winnerText = raceDetails.find(text = re.compile(r"Winner", re.I))
     winnerMatch = re.search(u"Winner \xa3([0-9,]+)", winnerText, re.I)
