@@ -165,8 +165,9 @@ class RaceModel(QAbstractTableModel):
 
     def headerData(self, section, orientation, role = Qt.DisplayRole):
         retVal = QVariant()
+        if role != Qt.DisplayRole:
+            return retVal
         if orientation == Qt.Horizontal:
-            print "Horizontal"
             if self.isColumn("name", section):
                 retVal = QVariant("Horse name")
             elif self.isColumn("rating", section):
