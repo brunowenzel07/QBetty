@@ -13,7 +13,7 @@ from PyQt4.QtCore import (pyqtSignature, QString, SIGNAL, QFileInfo, QDate,
 import sys
 from Model.RaceModel import (RaceModel,
                              getDefaultAdjustments, setDefaultAdjustments)
-from Model import Chance
+from Model import Chance, RaceCourses
 from RaceDelegate import RaceDelegate
 from editRoundsDlg import editRoundsDlg
 from editAdjustDlg import editAdjustDlg
@@ -63,6 +63,9 @@ class BettyMain(QMainWindow, Ui_Betty_MainWindow):
             rounds = None
         self.model = RaceModel(filename, rounds = rounds)
         self.setupUi(self)
+        self.courseCombo.clear()
+        self.courseCombo.addItem("Unknown")
+        self.courseCombo.addItems(RaceCourses.ukCourses)
         self.deleteButton.setEnabled(False)
         self.raceTable.setGridStyle(Qt.NoPen)
         self.raceTable.setModel(self.model)
