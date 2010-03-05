@@ -9,7 +9,6 @@ TODO
 - Downloading of RP web pages
 - GUI for downloading RP races
 - Add "Load Defaults" option to adjustment editing
-- Proper list of racecourses in combo box
 - Race Notes
 - Bet notes
 - Recent files section in File menu
@@ -17,7 +16,6 @@ TODO
 - Print session
 - Wizards for adding horses
 - Better rounding of odds
-- Correct Betfair odds display
 - Fractional odds display
 - Italic display of non-editable data
 - Right-click to delete or sort round columns
@@ -27,7 +25,9 @@ TODO
 - Remember odds setting.
 
 DONE
-- Parsing of RP race webpage : Done 5/2/2010
+- Correct Betfair odds display : Done 5/3/2010
+- Proper list of racecourses in combo box : Done 5/3/2010
+- Parsing of RP race webpage : Done 5/3/2010
 - Single click editing of race values : Done 2/3/2010
 - Bug with no adjustments on first open : Done 14/2/2010
 - Save and load default adjusts on close/open : Done 13/2/2010
