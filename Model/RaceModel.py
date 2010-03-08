@@ -34,7 +34,6 @@ class RaceModel(QAbstractTableModel):
     classdocs
     '''
 
-
     def __init__(self, filename = None, rounds = None):
         '''
         Constructor
@@ -155,9 +154,13 @@ class RaceModel(QAbstractTableModel):
             else:
                 return QVariant(int(Qt.AlignRight | Qt.AlignVCenter))
         elif role == Qt.FontRole:
-            if self.isColumn("round", column) or self.isColumn("adjRating", column):
+            if self.isColumn("round", column):
                 font = QFont()
                 font.setBold(True)
+                return QVariant(font)
+            elif self.isColumn("adjRating", column):
+                font = QFont()
+                font.setItalic(True)
                 return QVariant(font)
             else:
                 return QVariant()
