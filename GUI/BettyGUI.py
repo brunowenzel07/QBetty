@@ -55,6 +55,7 @@ class BettyMain(QMainWindow, Ui_Betty_MainWindow):
         state = settings.value("MainWindow/State").toByteArray()
         rounds = settings.value("Rounds").toStringList()
         adjusts = settings.value("DefaultAdjusts").toStringList()
+        self.__oddsDisplay = unicode(settings.value("OddsSetting").toString())
         if len(adjusts) > 0:
             setDefaultAdjustments([unicode(a) for a in adjusts])
         if len(rounds) > 0:
@@ -74,6 +75,11 @@ class BettyMain(QMainWindow, Ui_Betty_MainWindow):
                      self.check_deleteButton)
         self.connect(self.model, SIGNAL("rowsRemoved(QModelIndex,int,int)"),
                      self.check_deleteButton)
+        try:
+            button = self.__getattribute__("%sButton" % self.__oddsDisplay)
+            button.click()
+        except AttributeError:
+            self.decimalButton.click()
         self.reset()
         self.connect(self.model, SIGNAL("dirtied"), self.dirtied)
         self.move(pos)
@@ -141,14 +147,17 @@ class BettyMain(QMainWindow, Ui_Betty_MainWindow):
 
     @pyqtSignature("")
     def on_decimalButton_clicked(self):
+        self.__oddsDisplay = "decimal"
         self.model.setOddsDisplay(Chance.DecimalOddsDisplay)
 
     @pyqtSignature("")
     def on_betfairButton_clicked(self):
+        self.__oddsDisplay = "betfair"
         self.model.setOddsDisplay(Chance.BetfairOddsDisplay)
 
     @pyqtSignature("")
     def on_fractionalButton_clicked(self):
+        self.__oddsDisplay = "fractional"
         self.model.setOddsDisplay(Chance.FractionalOddsDisplay)
 
     @pyqtSignature("QString")
@@ -315,6 +324,8 @@ class BettyMain(QMainWindow, Ui_Betty_MainWindow):
                               QVariant(QStringList(self.model.roundSizes())))
             settings.setValue("DefaultAdjusts",
                               QVariant(QStringList(getDefaultAdjustments())))
+            settings.setValue("OddsSetting",
+                              QVariant(QString(self.__oddsDisplay)))
         else:
             event.ignore()
 
