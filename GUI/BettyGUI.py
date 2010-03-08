@@ -6,7 +6,7 @@ Created on 1 Feb 2010
 '''
 from ui_Betty_MainWindow import Ui_Betty_MainWindow
 from PyQt4.QtGui import (QMainWindow, QApplication,
-                         QMessageBox, QFileDialog)
+                         QMessageBox, QFileDialog, QRadioButton)
 from PyQt4.QtCore import (pyqtSignature, QString, SIGNAL, QFileInfo, QDate,
                           QTime, QSettings, QVariant, QSize, QPoint,
                           QStringList, Qt)
@@ -64,6 +64,7 @@ class BettyMain(QMainWindow, Ui_Betty_MainWindow):
             rounds = None
         self.model = RaceModel(filename, rounds = rounds)
         self.setupUi(self)
+        self.__makeAllOddsButtons()
         self.courseCombo.clear()
         self.courseCombo.addItem("Unknown")
         self.courseCombo.addItems(RaceCourses.ukCourses)
@@ -79,12 +80,31 @@ class BettyMain(QMainWindow, Ui_Betty_MainWindow):
             button = self.__getattribute__("%sButton" % self.__oddsDisplay)
             button.click()
         except AttributeError:
-            self.decimalButton.click()
+            implementedButton = [x for x in Chance.oddsList
+                                 if Chance.oddsMap[x].implemented][0]
+            button = self.__getattribute__("%sButton" % implementedButton)
+            button.click()
         self.reset()
         self.connect(self.model, SIGNAL("dirtied"), self.dirtied)
         self.move(pos)
         self.resize(size)
         self.restoreState(state)
+
+    def __makeAllOddsButtons(self):
+        def makeOddsButton(name, oddsDisplayer):
+            bname = "%sButton" % name
+            button = QRadioButton(self.oddsGroupBox)
+            self.__setattr__(bname, button)
+            def buttonClicked():
+                self.__oddsDisplay = name
+                self.model.setOddsDisplay(oddsDisplayer)
+            self.connect(button, SIGNAL("clicked()"),
+                         buttonClicked)
+            button.setEnabled(oddsDisplayer.implemented)
+            self.oddsLayout.addWidget(button)
+            button.setText(name.capitalize())
+        for oddsName in Chance.oddsList:
+            makeOddsButton(oddsName, Chance.oddsMap[oddsName])
 
     def reset(self):
         self.populateInfo()
@@ -144,21 +164,6 @@ class BettyMain(QMainWindow, Ui_Betty_MainWindow):
             return
         self.model.removeRows(row)
         self.resizeColumns()
-
-    @pyqtSignature("")
-    def on_decimalButton_clicked(self):
-        self.__oddsDisplay = "decimal"
-        self.model.setOddsDisplay(Chance.DecimalOddsDisplay)
-
-    @pyqtSignature("")
-    def on_betfairButton_clicked(self):
-        self.__oddsDisplay = "betfair"
-        self.model.setOddsDisplay(Chance.BetfairOddsDisplay)
-
-    @pyqtSignature("")
-    def on_fractionalButton_clicked(self):
-        self.__oddsDisplay = "fractional"
-        self.model.setOddsDisplay(Chance.FractionalOddsDisplay)
 
     @pyqtSignature("QString")
     def on_nameEdit_textChanged(self):

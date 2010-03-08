@@ -433,43 +433,15 @@
    <widget class="QWidget" name="dockWidgetContents_2">
     <layout class="QVBoxLayout" name="verticalLayout_6">
      <item>
-      <widget class="QGroupBox" name="groupBox">
+      <widget class="QGroupBox" name="oddsGroupBox">
        <property name="title">
         <string>&amp;Odds</string>
        </property>
-       <layout class="QVBoxLayout" name="verticalLayout_2">
-        <item>
-         <widget class="QRadioButton" name="decimalButton">
-          <property name="text">
-           <string>D&amp;ecimal</string>
-          </property>
-          <property name="checked">
-           <bool>true</bool>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QRadioButton" name="betfairButton">
-          <property name="text">
-           <string>&amp;Betfair</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QRadioButton" name="fractionalButton">
-          <property name="enabled">
-           <bool>false</bool>
-          </property>
-          <property name="text">
-           <string>&amp;Fractional</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
+       <layout class="QVBoxLayout" name="oddsLayout"/>
       </widget>
      </item>
      <item>
-      <widget class="QGroupBox" name="groupBox_3">
+      <widget class="QGroupBox" name="dataGroupBox">
        <property name="title">
         <string>Data Settings</string>
        </property>
@@ -495,7 +467,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QGroupBox" name="groupBox_2">
+      <widget class="QGroupBox" name="horseGroupBox">
        <property name="title">
         <string>Horse Actions</string>
        </property>
@@ -692,9 +664,6 @@
   <tabstop>furlongCombo</tabstop>
   <tabstop>classCombo</tabstop>
   <tabstop>prizeSpinner</tabstop>
-  <tabstop>decimalButton</tabstop>
-  <tabstop>betfairButton</tabstop>
-  <tabstop>fractionalButton</tabstop>
   <tabstop>editRoundsButton</tabstop>
   <tabstop>editAdjustsButton</tabstop>
   <tabstop>raceTable</tabstop>
