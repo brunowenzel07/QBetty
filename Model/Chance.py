@@ -11,11 +11,18 @@ def numDecimals(x):
     if x > 5: return 1
     return 2
 
-class DecimalOddsDisplay(object):
+class OddsDisplayer(object):
+    implemented = False
+    @classmethod
+    def display(cls, prob):
+        return "---"
+
+class DecimalOddsDisplay(OddsDisplayer):
     '''
     classdocs
     '''
 
+    implemented = True
 
     @classmethod
     def display(cls, prob):
@@ -27,7 +34,8 @@ class DecimalOddsDisplay(object):
             odds = (1 - prob) / prob
             return "%0.*f" % (numDecimals(odds), odds)
 
-class BetfairOddsDisplay(object):
+class BetfairOddsDisplay(OddsDisplayer):
+    implemented = True
     @classmethod
     def display(cls, prob):
         if prob is None or not isinstance(prob, float) or prob <= 0:
@@ -67,7 +75,7 @@ class BetfairOddsDisplay(object):
             odds = int((odds * mult) + 0.5) / float(mult)
             return "%0.*f" % (numDecimals, odds)
 
-class FractionalOddsDisplay(object):
+class FractionalOddsDisplay(OddsDisplayer):
     @classmethod
     def display(cls, prob):
         if prob is None or not isinstance(prob, float) or prob <= 0:
@@ -77,6 +85,10 @@ class FractionalOddsDisplay(object):
         else:
             return "---/---"
 
+oddsList = ("decimal", "betfair", "fractional")
+oddsMap = {"decimal":DecimalOddsDisplay,
+           "betfair":BetfairOddsDisplay,
+           "fractional":FractionalOddsDisplay}
 
 
 class Round(object):
