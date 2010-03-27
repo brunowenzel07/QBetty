@@ -65,11 +65,12 @@ class upDownList(object):
             enabled = True
         self.delButton.setEnabled(enabled)
         self.sortButton.setEnabled(enabled)
-        if self.listWidget.currentRow() > 0:
+        rowIndex = self.listWidget.currentRow()
+        if rowIndex > 0:
             self.upButton.setEnabled(enabled)
         else:
             self.upButton.setEnabled(False)
-        if self.listWidget.currentRow() < self.listWidget.count() - 1:
+        if rowIndex > 0 and rowIndex < self.listWidget.count() - 1:
             self.downButton.setEnabled(enabled)
         else:
             self.downButton.setEnabled(False)

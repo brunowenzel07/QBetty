@@ -9,7 +9,6 @@ from BeautifulSoup import BeautifulSoup
 import re
 import json
 from Data import Race
-from dircache import opendir
 
 class NoRaceDataError(Exception):
     pass
@@ -25,6 +24,8 @@ class RaceParser(object):
             raise NoRaceDataError()
         race.course = headline.contents[-1].strip()
         race.course = race.course.lower().capitalize()
+        if re.search(" \(.*\)", race.course):
+            race.course = re.sub(" \(.*\)", "", race.course)
         # Get race time
         raceDetails = headline.find(attrs = {"class":"navRace"})
         race.time = raceDetails.find(text = re.compile(r"\d+:\d+"))
@@ -58,7 +59,7 @@ class RaceParser(object):
                 race.prize = int(prize)
         # Get horse data and date
         horseDataFinder = re.compile(r"^\s*horsesData\s*=")
-        dateFinder = re.compile(r'^\s*var jsRaceDate="(\d{4}-\d{2}-\d{2})"')
+        dateFinder = re.compile(r'var jsRaceDate="(\d{4}-\d{2}-\d{2})"')
         horseData = "{}"
         for line in lines:
             if horseDataFinder.search(line):
@@ -99,5 +100,5 @@ if __name__ == "__main__":
         finally:
             handle.close()
         print race
-        for raceHorse in race:
-            print raceHorse
+        #for raceHorse in race:
+        #    print raceHorse

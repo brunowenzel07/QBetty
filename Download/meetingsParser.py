@@ -10,26 +10,46 @@ from Download import raceParser
 import re
 from urllib import urlopen
 
+def parseRaceDates(handle):
+    raceDates = []
+    lines = list(handle)
+    soup = BeautifulSoup("".join(lines), convertEntities = BeautifulSoup.HTML_ENTITIES)
+    dateFinder = re.compile("cards/home.sd\?r_date=(\d+-\d+-\d+)$")
+    raceDates = set([dateFinder.search(x['href']).group(1) for x in soup.findAll("a", href = dateFinder)])
+    raceDates = list(raceDates)
+    raceDates.sort()
+    return raceDates
 
 class RPDownloader(object):
     BASE_ADDRESS = "http://www.racingpost.com"
 
+    def getAvailableDates(self):
+        address = "%s/horses2/cards/home.sd" % (RPDownloader.BASE_ADDRESS)
+        return parseRaceDates(urlopen(address))
+
     def getMeetingsHTML(self, date):
         address = "%s/horses2/cards/home.sd?r_date=%s" % (RPDownloader.BASE_ADDRESS, date)
-        return urlopen(address).read()
+        return urlopen(address)
 
     def getRaceHTML(self, info):
         address = "%s%s" % (RPDownloader.BASE_ADDRESS, info.address)
-        return urlopen(address).read()
+        return urlopen(address)
 
 rpDownloader = RPDownloader()
 
 class MockRPDownloader(object):
+    def getAvailableDates(self):
+        print "Getting test dates"
+        address = "testdata/meetings.html"
+        return parseRaceDates(open(address))
+
     def getMeetingsHTML(self, date):
+        print "Getting test meetings"
         return open("testdata/meetings.html")
 
     def getRaceHTML(self, info):
-        return open("testdata/race_%s.html" % info.raceid).read()
+        print "Getting test race"
+        return open("testdata/race_%s.html" % info.raceid)
 
 class RaceDownloader():
 
@@ -119,6 +139,7 @@ def setTestMode():
 if __name__ == "__main__":
     setTestMode()
     parser = MeetingsParser()
+    print rpDownloader.getAvailableDates()
     mset = parser.parse(rpDownloader.getMeetingsHTML(""))
     print mset.date
     for course, meeting in mset.iteritems():
