@@ -27,7 +27,7 @@ class RaceDelegate(QItemDelegate):
         elif model.isColumn("adjRating", column):
             sample = "Topspeed"
         elif model.isColumn("round", column):
-            sample = "x100/30x"
+            sample = "xx100/30xx"
         return QSize(fm.width(sample), fm.height())
 
     def createEditor(self, parent, option, index):

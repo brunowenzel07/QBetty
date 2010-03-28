@@ -6,7 +6,9 @@ These can be freely downloaded from the internet.
 TODO
 - Printing
 - Print session
-- Sort horses by odds
+- Remember last save files directory
+- Allow non-runner status
+- Sort horses by odds & other things
 - Add "Load Defaults" option to adjustment editing
 - Race Notes
 - Bet notes
@@ -15,7 +17,6 @@ TODO
 - Better rounding of decimal odds
 - Right-click to delete or sort round columns
 - Toggle display of adjusted ratings columns
-- Allow non-runner status
 - Save any new racecourses into settings, and repopulate combo on open. Similarly for race class.
 
 
