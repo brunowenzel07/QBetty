@@ -30,6 +30,12 @@ class RaceParser(object):
         raceDetails = headline.find(attrs = {"class":"navRace"})
         race.time = raceDetails.find(text = re.compile(r"\d+:\d+"))
         race.time = race.time.strip()
+        timeMatch = re.search("(\d+):(\d+)", race.time)
+        if timeMatch:
+            hours = int(timeMatch.group(1))
+            minutes = int(timeMatch.group(2))
+            if hours < 12: hours += 12
+            race.time = "%02d:%02d" % (hours, minutes)
         # Get race name
         raceDetails = soup.find("p", {"class":"raceInfo"})
         details = raceDetails.find("strong").contents[0]
@@ -66,6 +72,9 @@ class RaceParser(object):
                 horseData = re.sub(".*?({.*}).*", r"\1", line)
             elif dateFinder.search(line):
                 race.date = dateFinder.search(line).group(1)
+                race.date = re.search("(\d{4})-(\d{2})-(\d{2})", race.date)
+                race.date = "%s/%s/%s" % (race.date.group(3), race.date.group(2),
+                                          race.date.group(1))
         horseData = json.loads(horseData)
         horseData = dict([(int(horseData[h]["no"]), horseData[h]) for h in horseData])
         horseNumbers = horseData.keys()

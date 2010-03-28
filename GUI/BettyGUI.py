@@ -132,11 +132,11 @@ class BettyMain(QMainWindow, Ui_Betty_MainWindow):
         if self.model.date is None:
             self.dateEdit.setDate(QDate.currentDate())
         else:
-            self.dateEdit.setDate(QDate.fromString(self.model.date))
+            self.dateEdit.setDate(QDate.fromString(self.model.date, QString("dd/MM/yyyy")))
         if self.model.time is None:
             self.timeEdit.setTime(QTime(12, 0))
         else:
-            self.timeEdit.setTime(QTime.fromString(self.model.time))
+            self.timeEdit.setTime(QTime.fromString(self.model.time, QString("h:mm")))
         miles = self.model.distance / 8
         furlongs = self.model.distance % 8
         self.milesSpinner.setValue(miles)
@@ -241,6 +241,8 @@ class BettyMain(QMainWindow, Ui_Betty_MainWindow):
             return
         import raceDownload
         newRace = raceDownload.selectRace()
+        if newRace is None:
+            return
         self.model.newDownload(newRace)
         self.reset()
 
@@ -344,6 +346,8 @@ class BettyMain(QMainWindow, Ui_Betty_MainWindow):
             event.ignore()
 
 if __name__ == "__main__":
+    import Download
+    Download.RPDownloader.setTestMode()
     app = QApplication(sys.argv)
     app.setOrganizationName("Whatang Software")
     app.setOrganizationDomain("whatang.org")
