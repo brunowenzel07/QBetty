@@ -13,7 +13,6 @@ TODO
 - Recent files section in File menu
 - Wizards for adding horses
 - Better rounding of decimal odds
-- Fractional odds display
 - Right-click to delete or sort round columns
 - Toggle display of adjusted ratings columns
 - Allow non-runner status
@@ -21,6 +20,7 @@ TODO
 
 
 DONE
+- Fractional odds display : Done 28/3/2010
 - GUI for downloading RP races : Done 28/3/2010
 - Parsing of RP meeting web pages : Done 27/03/2010
 - Parsing of RP card web pages : Done 27/03/2010
