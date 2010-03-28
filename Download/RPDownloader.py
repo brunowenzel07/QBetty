@@ -61,6 +61,8 @@ class RaceDownloader(object):
         self._downloaded = False
 
     def download(self):
+        if self._downloaded:
+            return
         html = rpdownloader.getRaceHTML(self)
         self.race = raceParser.parse(html)
         self._downloaded = True

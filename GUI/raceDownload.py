@@ -7,40 +7,47 @@ from optionSelector import optionSelector
 import Download
 from PyQt4.QtGui import QApplication
 from PyQt4.QtCore import Qt
+
+class CachedDetails(object):
+    dateList = None
+    meetingSet = {}
+
+details = CachedDetails()
+
 def selectRace():
-    QApplication.setOverrideCursor(Qt.WaitCursor)
-    dateList = Download.RPDownloader.getAvailableDates()
-    dlg = optionSelector("Select meeting date", dateList)
-    QApplication.setOverrideCursor(Qt.ArrowCursor)
+    if details.dateList is None:
+        QApplication.setOverrideCursor(Qt.WaitCursor)
+        details.dateList = Download.RPDownloader.getAvailableDates()
+        QApplication.setOverrideCursor(Qt.ArrowCursor)
+    dlg = optionSelector("Select race date", details.dateList)
     if not dlg.exec_():
         return None
-    date = dateList[dlg.getOptionIndex()]
-    QApplication.setOverrideCursor(Qt.WaitCursor)
-    meetingHTML = Download.RPDownloader.getMeetingsHTML(date)
-    meetingSet = Download.meetingsParser.parse(meetingHTML)
-    meetings = meetingSet.keys()
-    dlg = optionSelector("Select meeting", meetings)
-    QApplication.setOverrideCursor(Qt.ArrowCursor)
+    date = details.dateList[dlg.getOptionIndex()]
+    if details.meetingSet.get(date) is None:
+        QApplication.setOverrideCursor(Qt.WaitCursor)
+        meetingHTML = Download.RPDownloader.getMeetingsHTML(date)
+        details.meetingSet[date] = Download.meetingsParser.parse(meetingHTML)
+        QApplication.setOverrideCursor(Qt.ArrowCursor)
+    meetings = details.meetingSet[date].keys()
+    dlg = optionSelector("Select race course", meetings)
     if not dlg.exec_():
         return None
     meetingName = meetings[dlg.getOptionIndex()]
-    meeting = meetingSet[meetingName]
-    times = meeting.keys()
+    thisMeeting = details.meetingSet[date][meetingName]
+    times = thisMeeting.keys()
     times.sort()
     dlg = optionSelector("Select race time", times)
     if not dlg.exec_():
         return None
-    raceInfo = meeting[times[dlg.getOptionIndex()]]
+    raceInfo = thisMeeting[times[dlg.getOptionIndex()]]
     QApplication.setOverrideCursor(Qt.WaitCursor)
     raceInfo.download()
     QApplication.setOverrideCursor(Qt.ArrowCursor)
     return raceInfo.race
 
 if __name__ == "__main__":
-    from PyQt4.QtGui import QApplication
     import sys
     app = QApplication(sys.argv)
     Download.RPDownloader.setTestMode()
     race = selectRace()
     print race
-
