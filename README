@@ -4,12 +4,9 @@ To run Betty you will need Python 2.6 and PyQt4.4 or greater installed.
 These can be freely downloaded from the internet.
 
 TODO
-- Parsing of RP meeting web pages
-- Parsing of RP card web pages
-- Downloading of RP web pages
-- GUI for downloading RP races
 - Printing
 - Print session
+- Sort horses by odds
 - Add "Load Defaults" option to adjustment editing
 - Race Notes
 - Bet notes
@@ -24,6 +21,10 @@ TODO
 
 
 DONE
+- GUI for downloading RP races : Done 28/3/2010
+- Parsing of RP meeting web pages : Done 27/03/2010
+- Parsing of RP card web pages : Done 27/03/2010
+- Downloading of RP web pages : Done 27/03/2010
 - Remember odds setting. : Done 8/3/2010
 - Italic display of non-editable data : Done 5/3/2010
 - Correct Betfair odds display : Done 5/3/2010
