@@ -87,6 +87,9 @@ class RaceParser(object):
 
 parser = RaceParser()
 
+def parse(raceHandle):
+    return parser.parse(raceHandle)
+
 if __name__ == "__main__":
     import glob
     for raceFile in glob.glob("testdata/race_*.html"):

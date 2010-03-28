@@ -281,6 +281,14 @@ class RaceModel(QAbstractTableModel):
         self.filename = None
         self.dirty = False
 
+    def newDownload(self, newRace):
+        self.race = newRace
+        self.setAdjustNames(getDefaultAdjustments())
+        self.setColumnMaps()
+        self.reset()
+        self.updateOdds()
+        self.filename = None
+        self.dirty = True
 
     def save(self, filename = None):
         if filename is not None:

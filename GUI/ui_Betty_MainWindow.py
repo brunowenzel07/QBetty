@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'C:\Users\Mike_2\Eclipse workspace\Betty\src\GUI\Betty_MainWindow.ui'
 #
-# Created: Mon Mar 08 03:01:46 2010
+# Created: Sun Mar 28 02:21:55 2010
 #      by: PyQt4 UI code generator 4.7
 #
 # WARNING! All changes made in this file will be lost!
@@ -218,7 +218,7 @@ class Ui_Betty_MainWindow(object):
         self.actionSave.setIcon(icon3)
         self.actionSave.setObjectName("actionSave")
         self.actionDownload = QtGui.QAction(Betty_MainWindow)
-        self.actionDownload.setEnabled(False)
+        self.actionDownload.setEnabled(True)
         icon4 = QtGui.QIcon()
         icon4.addPixmap(QtGui.QPixmap(":/Icons/Web"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.actionDownload.setIcon(icon4)

@@ -6,67 +6,8 @@ Created on 27 Mar 2010
 '''
 
 from BeautifulSoup import BeautifulSoup
-from Download import raceParser
 import re
-from urllib import urlopen
-
-def parseRaceDates(handle):
-    raceDates = []
-    lines = list(handle)
-    soup = BeautifulSoup("".join(lines), convertEntities = BeautifulSoup.HTML_ENTITIES)
-    dateFinder = re.compile("cards/home.sd\?r_date=(\d+-\d+-\d+)$")
-    raceDates = set([dateFinder.search(x['href']).group(1) for x in soup.findAll("a", href = dateFinder)])
-    raceDates = list(raceDates)
-    raceDates.sort()
-    return raceDates
-
-class RPDownloader(object):
-    BASE_ADDRESS = "http://www.racingpost.com"
-
-    def getAvailableDates(self):
-        address = "%s/horses2/cards/home.sd" % (RPDownloader.BASE_ADDRESS)
-        return parseRaceDates(urlopen(address))
-
-    def getMeetingsHTML(self, date):
-        address = "%s/horses2/cards/home.sd?r_date=%s" % (RPDownloader.BASE_ADDRESS, date)
-        return urlopen(address)
-
-    def getRaceHTML(self, info):
-        address = "%s%s" % (RPDownloader.BASE_ADDRESS, info.address)
-        return urlopen(address)
-
-rpDownloader = RPDownloader()
-
-class MockRPDownloader(object):
-    def getAvailableDates(self):
-        print "Getting test dates"
-        address = "testdata/meetings.html"
-        return parseRaceDates(open(address))
-
-    def getMeetingsHTML(self, date):
-        print "Getting test meetings"
-        return open("testdata/meetings.html")
-
-    def getRaceHTML(self, info):
-        print "Getting test race"
-        return open("testdata/race_%s.html" % info.raceid)
-
-class RaceDownloader():
-
-    def __init__(self, course, date, time, title, address, raceid):
-        self.race = None
-        self.course = course
-        self.date = date
-        self.time = time
-        self.title = title
-        self.raceid = raceid
-        self.address = address
-        self._downloaded = False
-
-    def download(self):
-        html = rpDownloader.getRaceHTML(self)
-        self.race = raceParser.parser.parse(html)
-        self._downloaded = True
+import RPDownloader
 
 class Meeting(dict):
     def __init__(self, course, date):
@@ -75,8 +16,8 @@ class Meeting(dict):
         self.date = date
 
     def addRace(self, time, title, address, raceid):
-        self[time] = RaceDownloader(self.course, self.date,
-                                          time, title, address, raceid)
+        self[time] = RPDownloader.RaceDownloader(self.course, self.date,
+                                                 time, title, address, raceid)
         return self[time]
 
 class MeetingSet(dict):
@@ -94,14 +35,6 @@ class MeetingsParser(object):
     '''
     classdocs
     '''
-
-
-    def __init__(self):
-        '''
-        Constructor
-        '''
-        pass
-
     def parse(self, handle):
         meetings = MeetingSet()
         lines = list(handle)
@@ -132,21 +65,6 @@ class MeetingsParser(object):
                     thisMeeting.addRace(time, name, address, raceId)
         return meetings
 
-def setTestMode():
-    global rpDownloader
-    rpDownloader = MockRPDownloader()
-
-if __name__ == "__main__":
-    setTestMode()
-    parser = MeetingsParser()
-    print rpDownloader.getAvailableDates()
-    mset = parser.parse(rpDownloader.getMeetingsHTML(""))
-    print mset.date
-    for course, meeting in mset.iteritems():
-        print course
-        for time, race in meeting.iteritems():
-            print time, race.raceid, race.title
-            try: race.download()
-            except raceParser.NoRaceDataError:
-                continue
-            print race.race
+__parser = MeetingsParser()
+def parse(handle):
+    return __parser.parse(handle)

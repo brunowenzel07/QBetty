@@ -236,6 +236,15 @@ class BettyMain(QMainWindow, Ui_Betty_MainWindow):
         QMessageBox.about(self, "About...", message)
 
     @pyqtSignature("")
+    def on_actionDownload_triggered(self):
+        if not self.okToContinue():
+            return
+        import raceDownload
+        newRace = raceDownload.selectRace()
+        self.model.newDownload(newRace)
+        self.reset()
+
+    @pyqtSignature("")
     def on_editRoundsButton_clicked(self):
         dlg = editRoundsDlg(self.model, self)
         if dlg.exec_():
