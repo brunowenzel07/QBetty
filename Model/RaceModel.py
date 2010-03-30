@@ -203,7 +203,7 @@ class RaceModel(QAbstractTableModel):
 
     def setData(self, index, value, role = Qt.EditRole):
         if index.isValid() and 0 <= index.row() < len(self.race):
-            horse = self.race[index.row()]
+            horse = self.horseList[index.row()]
             column = index.column()
             if self.isColumn("name", column):
                 horse.name = value.toString()
@@ -237,7 +237,7 @@ class RaceModel(QAbstractTableModel):
 
     def removeRows(self, position, rows = 1, index = QModelIndex()):
         self.beginRemoveRows(QModelIndex(), position, position + rows - 1)
-        horses = [self.race[i] for i in xrange(position, position + rows)]
+        horses = [self.horseList[i] for i in xrange(position, position + rows)]
         for h in horses:
             self.race.delHorse(h)
         self.endRemoveRows()
