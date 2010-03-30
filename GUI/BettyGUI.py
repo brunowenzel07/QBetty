@@ -17,6 +17,7 @@ from Model import Chance, RaceCourses
 from RaceDelegate import RaceDelegate
 from editRoundsDlg import editRoundsDlg
 from editAdjustDlg import editAdjustDlg
+from Data import Horse
 import os
 
 appName = "Betty"
@@ -46,6 +47,7 @@ class BettyMain(QMainWindow, Ui_Betty_MainWindow):
         settings = QSettings()
         self.recentFiles = settings.value("RecentFiles").toStringList()
         filename = unicode(settings.value("LastFile").toString())
+        self.currentDir = os.path.dirname(filename)
         if len(filename) == 0:
             filename = None
         size = settings.value("MainWindow/Size",
@@ -56,6 +58,7 @@ class BettyMain(QMainWindow, Ui_Betty_MainWindow):
         rounds = settings.value("Rounds").toStringList()
         adjusts = settings.value("DefaultAdjusts").toStringList()
         self.__oddsDisplay = unicode(settings.value("OddsSetting").toString())
+        self.__sortOrder = unicode(settings.value("SortSetting").toString())
         if len(adjusts) > 0:
             setDefaultAdjustments([unicode(a) for a in adjusts])
         if len(rounds) > 0:
@@ -64,10 +67,13 @@ class BettyMain(QMainWindow, Ui_Betty_MainWindow):
             rounds = None
         self.model = RaceModel(filename, rounds = rounds)
         self.setupUi(self)
-        self.__makeAllOddsButtons()
+        course = self.model.course
         self.courseCombo.clear()
         self.courseCombo.addItem("Unknown")
         self.courseCombo.addItems(RaceCourses.ukCourses)
+        setCombo(self.courseCombo, course)
+        self.__makeAllOddsButtons()
+        self.__makeAllSortButtons()
         self.deleteButton.setEnabled(False)
         self.raceTable.setGridStyle(Qt.NoPen)
         self.raceTable.setModel(self.model)
@@ -83,6 +89,13 @@ class BettyMain(QMainWindow, Ui_Betty_MainWindow):
             implementedButton = [x for x in Chance.oddsList
                                  if Chance.oddsMap[x].implemented][0]
             button = self.__getattribute__("%sButton" % implementedButton)
+            button.click()
+        try:
+            button = getattr(self, "%sSortButton" % self.__sortOrder)
+            button.click()
+        except AttributeError:
+            implementedButton = [x for x in Horse.horseSortList][0]
+            button = getattr(self, "%sSortButton" % implementedButton)
             button.click()
         self.reset()
         self.connect(self.model, SIGNAL("dirtied"), self.dirtied)
@@ -105,6 +118,21 @@ class BettyMain(QMainWindow, Ui_Betty_MainWindow):
             button.setText(name.capitalize())
         for oddsName in Chance.oddsList:
             makeOddsButton(oddsName, Chance.oddsMap[oddsName])
+
+    def __makeAllSortButtons(self):
+        def makeSortButton(name, sortFunction):
+            bname = "%sSortButton" % name
+            button = QRadioButton(self.sortBox)
+            setattr(self, bname, button)
+            def buttonClicked():
+                self.__sortOrder = name
+                self.model.setSortOrder(sortFunction)
+            self.connect(button, SIGNAL("clicked()"),
+                         buttonClicked)
+            self.sortLayout.addWidget(button)
+            button.setText("By %s" % name.capitalize())
+        for sortName in Horse.horseSortList:
+            makeSortButton(sortName, Horse.horseSortMap[sortName])
 
     def reset(self):
         self.populateInfo()
@@ -136,7 +164,7 @@ class BettyMain(QMainWindow, Ui_Betty_MainWindow):
         if self.model.time is None:
             self.timeEdit.setTime(QTime(12, 0))
         else:
-            self.timeEdit.setTime(QTime.fromString(self.model.time, QString("h:mm")))
+            self.timeEdit.setTime(QTime.fromString(self.model.time, QString("hh:mm")))
         miles = self.model.distance / 8
         furlongs = self.model.distance % 8
         self.milesSpinner.setValue(miles)
@@ -199,11 +227,11 @@ class BettyMain(QMainWindow, Ui_Betty_MainWindow):
 
     @pyqtSignature("QDate")
     def on_dateEdit_dateChanged(self, date):
-        self.model.date = unicode(date.toString())
+        self.model.date = unicode(date.toString("dd/MM/yyyy"))
 
     @pyqtSignature("QTime")
     def on_timeEdit_timeChanged(self, time):
-        self.model.time = unicode(time.toString())
+        self.model.time = unicode(time.toString("hh:mm"))
 
     @pyqtSignature("int")
     def on_prizeSpinner_valueChanged(self):
@@ -286,13 +314,15 @@ class BettyMain(QMainWindow, Ui_Betty_MainWindow):
                 QMessageBox.warning(self, "File Error",
                                     "Could not save %s" % filename)
                 return False
+            self.currentDir = os.path.dirname(self.model.filename)
+            self.reset()
             return True
 
     def fileSaveAs(self):
-        path = "."
-        if self.model.filename is not None:
-            path = QFileInfo(self.model.filename).path()
         extensionName = "Betty files (%s)" % self.__formatExtension
+        path = os.path.join(self.currentDir, "_".join([str(self.dateEdit.date().toString("yyyyMMdd")),
+                                                       self.model.course,
+                                                       str(self.timeEdit.time().toString("hhmm"))]))
         filename = QFileDialog.getSaveFileName(self,
                                                "Betty - Save Race As",
                                                path,
@@ -307,14 +337,14 @@ class BettyMain(QMainWindow, Ui_Betty_MainWindow):
     def fileOpen(self, filename = None):
         if not self.okToContinue():
             return
-        path = QFileInfo(filename).path() if filename is not None else "."
         extensionName = "Betty files (%s)" % self.__formatExtension
         filename = QFileDialog.getOpenFileName(self,
                                                "Betty - Load Race",
-                                               path,
+                                               self.currentDir,
                                                extensionName)
         if not filename.isEmpty():
             if self.model.load(unicode(filename)):
+                self.currentDir = os.path.dirname(self.model.filename)
                 self.reset()
             else:
                 QMessageBox.warning(self, "File Error",
@@ -342,6 +372,8 @@ class BettyMain(QMainWindow, Ui_Betty_MainWindow):
                               QVariant(QStringList(getDefaultAdjustments())))
             settings.setValue("OddsSetting",
                               QVariant(QString(self.__oddsDisplay)))
+            settings.setValue("SortSetting",
+                              QVariant(QString(self.__sortOrder)))
         else:
             event.ignore()
 
