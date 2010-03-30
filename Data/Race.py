@@ -6,6 +6,9 @@ Created on 1 Feb 2010
 '''
 from Horse import Horse
 from Adjustments import Adjustments, defaultAdjusts
+import xml.dom.minidom
+import codecs
+
 
 class Race(object):
     '''
@@ -96,24 +99,27 @@ class Race(object):
 
     def save(self, target):
         if isinstance(target, basestring):
-            try: target = open(target, "w")
-            except OSError:
+            try: target = codecs.open(target, "wb", encoding = "utf-8")
+            except IOError:
                 return False
-        if not isinstance(target, file):
-            return False
         doc = self.getXML()
-        target.write(doc.toxml())
+        try:
+            target.write(doc.toxml(encoding = "utf-8").decode("utf-8"))
+        except:
+            return False
         return True
 
     def load(self, target):
+        print "Opening %s" % target
         if isinstance(target, basestring):
-            try: target = open(target, "r")
-            except OSError:
+            try: target = codecs.open(target, "rb", encoding = "utf-8")
+            except IOError:
                 return False
-        if not isinstance(target, file):
+        xmlString = unicode("".join(target.readlines()))
+        try:
+            doc = xml.dom.minidom.parseString(xmlString.encode("utf-8"))
+        except:
             return False
-        import xml.dom.minidom
-        doc = xml.dom.minidom.parse(target)
         top = doc.documentElement
         for tag, tagType in self.__tags:
             for node in doc.getElementsByTagName(tag):
@@ -141,9 +147,7 @@ class Race(object):
                 self.adjusts.readHorseXMLTree(horse, horseNode)
         return True
 
-
     def getXML(self):
-        import xml.dom.minidom
         impl = xml.dom.minidom.getDOMImplementation()
         doc = impl.createDocument(None, "race", None)
         top = doc.documentElement
@@ -152,7 +156,7 @@ class Race(object):
             top.appendChild(node)
             value = self.__getattribute__(tag)
             if value is None: continue
-            text = doc.createTextNode(str(value))
+            text = doc.createTextNode(unicode(value))
             node.appendChild(text)
         top.appendChild(self.adjusts.getXMLTree(doc))
         horseList = doc.createElement("horseList")
