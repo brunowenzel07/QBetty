@@ -9,10 +9,9 @@ from PyQt4.QtCore import QAbstractTableModel, QModelIndex, QVariant
 from PyQt4.QtCore import Qt, SIGNAL
 from PyQt4.QtGui import QFont
 from Data.Race import emptyRace, Race
-from Data.Horse import Horse
 from Model.Chance import Round
 from Model import Chance
-from Data import Adjustments
+from Data import Adjustments, Horse
 
 def makeRaceProperty(attribute):
     def fget(self):
@@ -33,24 +32,25 @@ class RaceModel(QAbstractTableModel):
     '''
     classdocs
     '''
-
     def __init__(self, filename = None, rounds = None):
         '''
         Constructor
         '''
         super(RaceModel, self).__init__()
-        self.filename = filename
+        self.filename = None
         self.dirty = False
         self.oddsDisplay = Chance.DecimalOddsDisplay
         self.race = None
         self.rounds = []
+        self.horseSorter = Horse.cmpHorseByInsertion
+        self.horseList = []
         self.__columnMaps = {}
         self.makeColumns("name")
         self.makeColumns("rating")
         self.makeColumns("adjRating")
         self.makeColumns("adjust")
         self.makeColumns("round")
-        self.load()
+        self.load(filename)
         self.setColumnMaps()
         self.setRounds(rounds)
         self.updateOdds()
@@ -108,11 +108,11 @@ class RaceModel(QAbstractTableModel):
             self.__columnMaps[colMap] = {}
         column = self.__setColumnMap("name", 0, xrange(0, 1))
         column += self.__setColumnMap("rating", column,
-                                      xrange(0, Horse.numRatings))
+                                      xrange(0, Horse.Horse.numRatings))
         column += self.__setColumnMap("adjust", column,
                                       xrange(0, len(self.race.adjusts)))
         column += self.__setColumnMap("adjRating", column,
-                                      xrange(0, Horse.numRatings))
+                                      xrange(0, Horse.Horse.numRatings))
         column += self.__setColumnMap("round", column,
                                       xrange(0, len(self.rounds)))
 
@@ -121,13 +121,13 @@ class RaceModel(QAbstractTableModel):
 
     def columnCount(self, index = QModelIndex()): #@UnusedVariable
         return int(len(self.race.adjusts) +
-                   (Horse.numRatings * 2) + 1 + len(self.rounds))
+                   (Horse.Horse.numRatings * 2) + 1 + len(self.rounds))
 
     def data(self, index, role = Qt.DisplayRole):
         if (not index.isValid() or
             not (0 <= index.row() < len(self.race))):
             return QVariant()
-        horse = self.race[index.row()]
+        horse = self.horseList[index.row()]
         column = index.column()
         if role == Qt.DisplayRole:
             retVal = QVariant()
@@ -175,13 +175,13 @@ class RaceModel(QAbstractTableModel):
                 retVal = QVariant("Horse name")
             elif self.isColumn("rating", section):
                 index = self.getColumn("rating", section)
-                retVal = QVariant(Horse.ratingTitles[index])
+                retVal = QVariant(Horse.Horse.ratingTitles[index])
             elif self.isColumn("adjust", section):
                 index = self.getColumn("adjust", section)
                 retVal = QVariant(self.race.adjusts[index])
             elif self.isColumn("adjRating", section):
                 index = self.getColumn("adjRating", section)
-                retVal = QVariant("Adjusted\n" + Horse.ratingTitles[index])
+                retVal = QVariant("Adjusted\n" + Horse.Horse.ratingTitles[index])
             elif self.isColumn("round", section):
                 index = self.getColumn("round", section)
                 retVal = QVariant("%d%%" % self.rounds[index].roundVal)
@@ -191,6 +191,7 @@ class RaceModel(QAbstractTableModel):
 
     def updateOdds(self):
         self.race.calculate()
+        self.sortHorses()
 
     def flags(self, index):
         if not index.isValid():
@@ -246,6 +247,15 @@ class RaceModel(QAbstractTableModel):
 
     def setOddsDisplay(self, displayer):
         self.oddsDisplay = displayer
+        self.reset()
+
+    def setSortOrder(self, orderFunc):
+        self.horseSorter = orderFunc
+        self.sortHorses()
+
+    def sortHorses(self):
+        self.horseList = list(self.race.horses)
+        self.horseList.sort(cmp = self.horseSorter)
         self.reset()
 
     def load(self, filename = None):

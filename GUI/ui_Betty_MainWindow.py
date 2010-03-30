@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'C:\Users\Mike_2\Eclipse workspace\Betty\src\GUI\Betty_MainWindow.ui'
 #
-# Created: Sun Mar 28 02:21:55 2010
+# Created: Sun Mar 28 17:23:34 2010
 #      by: PyQt4 UI code generator 4.7
 #
 # WARNING! All changes made in this file will be lost!
@@ -175,6 +175,11 @@ class Ui_Betty_MainWindow(object):
         self.oddsLayout = QtGui.QVBoxLayout(self.oddsGroupBox)
         self.oddsLayout.setObjectName("oddsLayout")
         self.verticalLayout_6.addWidget(self.oddsGroupBox)
+        self.sortBox = QtGui.QGroupBox(self.dockWidgetContents_2)
+        self.sortBox.setObjectName("sortBox")
+        self.sortLayout = QtGui.QVBoxLayout(self.sortBox)
+        self.sortLayout.setObjectName("sortLayout")
+        self.verticalLayout_6.addWidget(self.sortBox)
         self.dataGroupBox = QtGui.QGroupBox(self.dockWidgetContents_2)
         self.dataGroupBox.setObjectName("dataGroupBox")
         self.verticalLayout_3 = QtGui.QVBoxLayout(self.dataGroupBox)
@@ -325,6 +330,7 @@ class Ui_Betty_MainWindow(object):
         self.prizeSpinner.setPrefix(QtGui.QApplication.translate("Betty_MainWindow", "£", None, QtGui.QApplication.UnicodeUTF8))
         self.dockWidget.setWindowTitle(QtGui.QApplication.translate("Betty_MainWindow", "Preferences", None, QtGui.QApplication.UnicodeUTF8))
         self.oddsGroupBox.setTitle(QtGui.QApplication.translate("Betty_MainWindow", "&Odds", None, QtGui.QApplication.UnicodeUTF8))
+        self.sortBox.setTitle(QtGui.QApplication.translate("Betty_MainWindow", "Sort Order", None, QtGui.QApplication.UnicodeUTF8))
         self.dataGroupBox.setTitle(QtGui.QApplication.translate("Betty_MainWindow", "Data Settings", None, QtGui.QApplication.UnicodeUTF8))
         self.editRoundsButton.setText(QtGui.QApplication.translate("Betty_MainWindow", "Edit Rounds", None, QtGui.QApplication.UnicodeUTF8))
         self.editAdjustsButton.setText(QtGui.QApplication.translate("Betty_MainWindow", "Edit Adjustments", None, QtGui.QApplication.UnicodeUTF8))

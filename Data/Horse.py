@@ -5,6 +5,34 @@ Created on 1 Feb 2010
 
 '''
 
+def cmpHorseByInsertion(horseA, horseB):
+    return (horseA.id - horseB.id)
+
+def cmpHorseByName(horseA, horseB):
+    na = horseA.name.lower()
+    nb = horseB.name.lower()
+    if na < nb:
+        return - 1
+    elif na == nb:
+        return 1
+    else:
+        return 0
+
+def cmpHorseByOdds(horseA, horseB):
+    if horseA.prob > horseB.prob:
+        return - 1
+    elif horseA.prob == horseB.prob:
+        return 0
+    else:
+        return 1
+
+horseSortMap = [("insertion", cmpHorseByInsertion),
+                ("name", cmpHorseByName),
+                ("odds", cmpHorseByOdds)]
+horseSortList = [s[0] for s in horseSortMap]
+horseSortMap = dict(horseSortMap)
+
+
 class Horse(object):
     '''
     classdocs
