@@ -6,21 +6,27 @@ These can be freely downloaded from the internet.
 TODO
 - Printing
 - Print session
-- Remember last save files directory
+- Improved download GUI
+- Persistence of downloads across instances?
 - Allow non-runner status
-- Sort horses by odds & other things
 - Add "Load Defaults" option to adjustment editing
+- Recent files section in File menu
+- Fetch odds & highlight possible bets
 - Race Notes
 - Bet notes
-- Recent files section in File menu
+
+OBSOLETE REQUIREMENTS?
 - Wizards for adding horses
 - Better rounding of decimal odds
 - Right-click to delete or sort round columns
-- Toggle display of adjusted ratings columns
+- Toggle display of adjusted ratings columns 
 - Save any new racecourses into settings, and repopulate combo on open. Similarly for race class.
 
 
 DONE
+- Remember last save files directory : Done 29/03/2010
+- Correct handling of unicode data : Done 29/03//2010
+- Sort horses by odds & other things : Done 28/03/2010
 - Fractional odds display : Done 28/3/2010
 - GUI for downloading RP races : Done 28/3/2010
 - Parsing of RP meeting web pages : Done 27/03/2010
