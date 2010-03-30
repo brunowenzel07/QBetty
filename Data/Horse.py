@@ -9,8 +9,8 @@ def cmpHorseByInsertion(horseA, horseB):
     return (horseA.id - horseB.id)
 
 def cmpHorseByName(horseA, horseB):
-    na = horseA.name.lower()
-    nb = horseB.name.lower()
+    na = unicode(horseA.name).lower()
+    nb = unicode(horseB.name).lower()
     if na < nb:
         return - 1
     elif na == nb:
