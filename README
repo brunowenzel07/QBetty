@@ -4,6 +4,7 @@ To run Betty you will need Python 2.6 and PyQt4.4 or greater installed.
 These can be freely downloaded from the internet.
 
 TODO
+- Table selection bug : can't select row?
 - Printing
 - Print session
 - Improved download GUI
