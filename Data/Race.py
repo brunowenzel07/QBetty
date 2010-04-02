@@ -110,7 +110,6 @@ class Race(object):
         return True
 
     def load(self, target):
-        print "Opening %s" % target
         if isinstance(target, basestring):
             try: target = codecs.open(target, "rb", encoding = "utf-8")
             except IOError:
