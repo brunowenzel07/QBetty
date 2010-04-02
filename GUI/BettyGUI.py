@@ -21,7 +21,7 @@ from Data import Horse
 import os
 
 appName = "Betty"
-appVersion = "0.3"
+appVersion = "0.4"
 
 def setCombo(combo, itemText):
     itemList = [unicode(combo.itemText(i)) for
@@ -351,10 +351,8 @@ class BettyMain(QMainWindow, Ui_Betty_MainWindow):
                                     "Could not load %s" % filename)
 
     def check_deleteButton(self):
-        if(self.model.rowCount() > 2):
-            self.deleteButton.setEnabled(True)
-        else:
-            self.deleteButton.setEnabled(False)
+        enabled = self.model.rowCount() > 2
+        self.deleteButton.setEnabled(enabled)
 
     def closeEvent(self, event):
         if self.okToContinue():
