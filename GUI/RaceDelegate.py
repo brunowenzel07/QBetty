@@ -52,9 +52,9 @@ class RaceDelegate(QItemDelegate):
 
     def setEditorData(self, editor, index):
         model = index.model()
-        horse = model.race[index.row()]
+        horse = model.horseList[index.row()]
         if model.isColumn("name", index):
-            editor.setText(model.race[index.row()].name)
+            editor.setText(horse.name)
         elif model.isColumn("rating", index):
             ratingIndex = model.getColumn("rating", index)
             editor.setValue(horse[ratingIndex])
