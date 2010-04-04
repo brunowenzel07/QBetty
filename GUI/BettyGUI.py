@@ -4,13 +4,14 @@ Created on 1 Feb 2010
 @author: Mike Thomas
 
 '''
-from ui_Betty_MainWindow import Ui_Betty_MainWindow
+import os
 from PyQt4.QtGui import (QMainWindow, QApplication,
                          QMessageBox, QFileDialog, QRadioButton)
 from PyQt4.QtCore import (pyqtSignature, QString, SIGNAL, QFileInfo, QDate,
                           QTime, QSettings, QVariant, QSize, QPoint,
                           QStringList, Qt)
 import sys
+from ui_Betty_MainWindow import Ui_Betty_MainWindow
 from Model.RaceModel import (RaceModel,
                              getDefaultAdjustments, setDefaultAdjustments)
 from Model import Chance, RaceCourses
@@ -18,10 +19,10 @@ from RaceDelegate import RaceDelegate
 from editRoundsDlg import editRoundsDlg
 from editAdjustDlg import editAdjustDlg
 from Data import Horse
-import os
+import raceSelector
 
 appName = "Betty"
-appVersion = "0.4"
+appVersion = "0.5"
 
 def setCombo(combo, itemText):
     itemList = [unicode(combo.itemText(i)) for
@@ -273,8 +274,10 @@ class BettyMain(QMainWindow, Ui_Betty_MainWindow):
     def on_actionDownload_triggered(self):
         if not self.okToContinue():
             return
-        import raceDownload
-        newRace = raceDownload.selectRace()
+        dlg = raceSelector.raceSelector(self)
+        if not dlg.exec_():
+            return
+        newRace = dlg.race
         if newRace is None:
             return
         self.model.newDownload(newRace)
