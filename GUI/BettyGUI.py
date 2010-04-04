@@ -169,6 +169,10 @@ class BettyMain(QMainWindow, Ui_Betty_MainWindow):
         furlongs = self.model.distance % 8
         self.milesSpinner.setValue(miles)
         self.furlongCombo.setCurrentIndex(furlongs)
+        self.setNumRunners()
+
+    def setNumRunners(self):
+        self.RunnerLabel.setText("%d" % self.model.rowCount())
 
     @pyqtSignature("")
     def on_addButton_clicked(self):
@@ -177,6 +181,7 @@ class BettyMain(QMainWindow, Ui_Betty_MainWindow):
         index = self.model.index(row, 0)
         self.raceTable.setCurrentIndex(index)
         self.raceTable.edit(index)
+        self.setNumRunners()
 
     @pyqtSignature("")
     def on_deleteButton_clicked(self):
@@ -192,6 +197,7 @@ class BettyMain(QMainWindow, Ui_Betty_MainWindow):
             return
         self.model.removeRows(row)
         self.resizeColumns()
+        self.setNumRunners()
 
     @pyqtSignature("QString")
     def on_nameEdit_textChanged(self):

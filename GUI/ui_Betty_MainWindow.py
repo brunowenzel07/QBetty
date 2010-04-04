@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'C:\Users\Mike_2\Eclipse workspace\Betty\src\GUI\Betty_MainWindow.ui'
 #
-# Created: Fri Apr 02 21:18:56 2010
+# Created: Sun Apr 04 18:47:07 2010
 #      by: PyQt4 UI code generator 4.7
 #
 # WARNING! All changes made in this file will be lost!
@@ -156,6 +156,12 @@ class Ui_Betty_MainWindow(object):
         self.prizeSpinner.setSingleStep(1000)
         self.prizeSpinner.setObjectName("prizeSpinner")
         self.horizontalLayout.addWidget(self.prizeSpinner)
+        self.label_6 = QtGui.QLabel(self.frame)
+        self.label_6.setObjectName("label_6")
+        self.horizontalLayout.addWidget(self.label_6)
+        self.RunnerLabel = QtGui.QLabel(self.frame)
+        self.RunnerLabel.setObjectName("RunnerLabel")
+        self.horizontalLayout.addWidget(self.RunnerLabel)
         spacerItem1 = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
         self.horizontalLayout.addItem(spacerItem1)
         self.verticalLayout.addLayout(self.horizontalLayout)
@@ -328,6 +334,8 @@ class Ui_Betty_MainWindow(object):
         self.classCombo.setItemText(3, QtGui.QApplication.translate("Betty_MainWindow", "Class D", None, QtGui.QApplication.UnicodeUTF8))
         self.label_8.setText(QtGui.QApplication.translate("Betty_MainWindow", "Prize Money", None, QtGui.QApplication.UnicodeUTF8))
         self.prizeSpinner.setPrefix(QtGui.QApplication.translate("Betty_MainWindow", "£", None, QtGui.QApplication.UnicodeUTF8))
+        self.label_6.setText(QtGui.QApplication.translate("Betty_MainWindow", "Runners", None, QtGui.QApplication.UnicodeUTF8))
+        self.RunnerLabel.setText(QtGui.QApplication.translate("Betty_MainWindow", "TextLabel", None, QtGui.QApplication.UnicodeUTF8))
         self.dockWidget.setWindowTitle(QtGui.QApplication.translate("Betty_MainWindow", "Preferences", None, QtGui.QApplication.UnicodeUTF8))
         self.oddsGroupBox.setTitle(QtGui.QApplication.translate("Betty_MainWindow", "&Odds", None, QtGui.QApplication.UnicodeUTF8))
         self.sortBox.setTitle(QtGui.QApplication.translate("Betty_MainWindow", "Sort Order", None, QtGui.QApplication.UnicodeUTF8))
