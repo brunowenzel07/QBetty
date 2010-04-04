@@ -6,7 +6,6 @@ These can be freely downloaded from the internet.
 TODO
 - Printing
 - Print session
-- Improved download GUI
 - Persistence of downloads across instances?
 - Allow non-runner status
 - Add "Load Defaults" option to adjustment editing
@@ -24,6 +23,7 @@ OBSOLETE REQUIREMENTS?
 
 
 DONE
+- Improved download GUI : Done 04/04/2010
 - Table selection bug : can't select row? : Done 02/04/2010
 - Remember last save files directory : Done 29/03/2010
 - Correct handling of unicode data : Done 29/03//2010
