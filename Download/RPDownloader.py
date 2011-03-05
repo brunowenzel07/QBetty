@@ -25,15 +25,18 @@ class RPDownloader(object):
 
     def getAvailableDates(self):
         address = "%s/horses2/cards/home.sd" % (RPDownloader.BASE_ADDRESS)
+#        print "Getting dates from", address
         return parseRaceDates(urlopen(address))
 
     def getMeetingsHTML(self, date):
         address = "%s/horses2/cards/home.sd?r_date=%s" % (RPDownloader.BASE_ADDRESS, date)
+#        print "Getting meetings from", address
         return urlopen(address)
 
     def getRaceHTML(self, info):
-        address = "%s%s" % (RPDownloader.BASE_ADDRESS, info.address)
-        return urlopen(address)
+#        address = "%s%s" % (RPDownloader.BASE_ADDRESS, info.address)
+#        print "Getting race HTML from", info.address
+        return urlopen(info.address)
 
 class MockRPDownloader(object):
     def getAvailableDates(self):
@@ -41,7 +44,7 @@ class MockRPDownloader(object):
         address = os.path.join(testDataDir, "meetings.html")
         return parseRaceDates(open(address))
 
-    def getMeetingsHTML(self, date):
+    def getMeetingsHTML(self, date_):
         print "Getting test meetings"
         return open(os.path.join(testDataDir, "meetings.html"))
 
