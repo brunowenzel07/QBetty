@@ -7,7 +7,7 @@ Created on 1 Feb 2010
 import os
 from PyQt4.QtGui import (QMainWindow, QApplication,
                          QMessageBox, QFileDialog, QRadioButton)
-from PyQt4.QtCore import (pyqtSignature, QString, SIGNAL, QFileInfo, QDate,
+from PyQt4.QtCore import (pyqtSignature, QString, SIGNAL, QDate,
                           QTime, QSettings, QVariant, QSize, QPoint,
                           QStringList, Qt)
 import sys
@@ -21,8 +21,8 @@ from editAdjustDlg import editAdjustDlg
 from Data import Horse
 import raceSelector
 
-appName = "Betty"
-appVersion = "0.5"
+APPNAME = "Betty"
+APPVERSION = "0.5"
 
 def setCombo(combo, itemText):
     itemList = [unicode(combo.itemText(i)) for
@@ -45,16 +45,35 @@ class BettyMain(QMainWindow, Ui_Betty_MainWindow):
         Constructor
         '''
         super(BettyMain, self).__init__(parent)
+        state, size, pos = self.__readSettings()
+        self.setupUi(self)
+        self.__setupCourseCombo()
+        self.__makeAllOddsButtons()
+        self.__makeAllSortButtons()
+        self.deleteButton.setEnabled(False)
+        self.raceTable.setGridStyle(Qt.NoPen)
+        self.raceTable.setModel(self.model)
+        self.raceTable.setItemDelegate(RaceDelegate(self))
+        self.connect(self.model, SIGNAL("rowsInserted(QModelIndex,int,int)"),
+                     self.__check_deleteButton)
+        self.connect(self.model, SIGNAL("rowsRemoved(QModelIndex,int,int)"),
+                     self.__check_deleteButton)
+        self.__loadButtonSettings()
+        self.reset()
+        self.connect(self.model, SIGNAL("dirtied"), self.dirtied)
+        self.move(pos)
+        self.resize(size)
+        self.restoreState(state)
+
+    def __readSettings(self):
         settings = QSettings()
         self.recentFiles = settings.value("RecentFiles").toStringList()
         filename = unicode(settings.value("LastFile").toString())
         self.currentDir = os.path.dirname(filename)
         if len(filename) == 0:
             filename = None
-        size = settings.value("MainWindow/Size",
-                              QVariant(QSize(100, 500))).toSize()
-        pos = settings.value("MainWindow/Position",
-                           QVariant(QPoint(100, 100))).toPoint()
+        size = settings.value("MainWindow/Size", QVariant(QSize(100, 500))).toSize()
+        pos = settings.value("MainWindow/Position", QVariant(QPoint(100, 100))).toPoint()
         state = settings.value("MainWindow/State").toByteArray()
         rounds = settings.value("Rounds").toStringList()
         adjusts = settings.value("DefaultAdjusts").toStringList()
@@ -63,33 +82,20 @@ class BettyMain(QMainWindow, Ui_Betty_MainWindow):
         if len(adjusts) > 0:
             setDefaultAdjustments([unicode(a) for a in adjusts])
         if len(rounds) > 0:
-            rounds = [ int(unicode(r)) for r in rounds ]
+            rounds = [int(unicode(r)) for r in rounds]
         else:
             rounds = None
         self.model = RaceModel(filename, rounds = rounds)
-        self.setupUi(self)
-        course = self.model.course
-        self.courseCombo.clear()
-        self.courseCombo.addItem("Unknown")
-        self.courseCombo.addItems(RaceCourses.ukCourses)
-        setCombo(self.courseCombo, course)
-        self.__makeAllOddsButtons()
-        self.__makeAllSortButtons()
-        self.deleteButton.setEnabled(False)
-        self.raceTable.setGridStyle(Qt.NoPen)
-        self.raceTable.setModel(self.model)
-        self.raceTable.setItemDelegate(RaceDelegate(self))
-        self.connect(self.model, SIGNAL("rowsInserted(QModelIndex,int,int)"),
-                     self.check_deleteButton)
-        self.connect(self.model, SIGNAL("rowsRemoved(QModelIndex,int,int)"),
-                     self.check_deleteButton)
+        return state, size, pos
+
+
+    def __loadButtonSettings(self):
         try:
-            button = self.__getattribute__("%sButton" % self.__oddsDisplay)
+            button = getattr(self, "%sButton" % self.__oddsDisplay)
             button.click()
         except AttributeError:
-            implementedButton = [x for x in Chance.oddsList
-                                 if Chance.oddsMap[x].implemented][0]
-            button = self.__getattribute__("%sButton" % implementedButton)
+            implementedButton = [x for x in Chance.oddsList if Chance.oddsMap[x].implemented][0]
+            button = getattr(self, "%sButton" % implementedButton)
             button.click()
         try:
             button = getattr(self, "%sSortButton" % self.__sortOrder)
@@ -98,17 +104,18 @@ class BettyMain(QMainWindow, Ui_Betty_MainWindow):
             implementedButton = [x for x in Horse.horseSortList][0]
             button = getattr(self, "%sSortButton" % implementedButton)
             button.click()
-        self.reset()
-        self.connect(self.model, SIGNAL("dirtied"), self.dirtied)
-        self.move(pos)
-        self.resize(size)
-        self.restoreState(state)
+
+    def __setupCourseCombo(self):
+        self.courseCombo.clear()
+        self.courseCombo.addItem("Unknown")
+        self.courseCombo.addItems(RaceCourses.ukCourses)
+        setCombo(self.courseCombo, self.model.course)
 
     def __makeAllOddsButtons(self):
         def makeOddsButton(name, oddsDisplayer):
             bname = "%sButton" % name
             button = QRadioButton(self.oddsGroupBox)
-            self.__setattr__(bname, button)
+            setattr(self, bname, button)
             def buttonClicked():
                 self.__oddsDisplay = name
                 self.model.setOddsDisplay(oddsDisplayer)
@@ -138,12 +145,12 @@ class BettyMain(QMainWindow, Ui_Betty_MainWindow):
     def reset(self):
         self.populateInfo()
         self.resizeColumns()
-        self.check_deleteButton()
+        self.__check_deleteButton()
         if self.model.filename is None:
-            self.setWindowTitle("%s v%s - Unnamed[*]" % (appName, appVersion))
+            self.setWindowTitle("%s v%s - Unnamed[*]" % (APPNAME, APPVERSION))
         else:
             self.setWindowTitle("%s v%s - %s[*]" %
-                                (appName, appVersion,
+                                (APPNAME, APPVERSION,
                                  os.path.basename(self.model.filename)))
         self.setWindowModified(self.model.dirty)
 
@@ -170,9 +177,9 @@ class BettyMain(QMainWindow, Ui_Betty_MainWindow):
         furlongs = self.model.distance % 8
         self.milesSpinner.setValue(miles)
         self.furlongCombo.setCurrentIndex(furlongs)
-        self.setNumRunners()
+        self.__setNumRunners()
 
-    def setNumRunners(self):
+    def __setNumRunners(self):
         self.RunnerLabel.setText("%d" % self.model.rowCount())
 
     @pyqtSignature("")
@@ -182,7 +189,7 @@ class BettyMain(QMainWindow, Ui_Betty_MainWindow):
         index = self.model.index(row, 0)
         self.raceTable.setCurrentIndex(index)
         self.raceTable.edit(index)
-        self.setNumRunners()
+        self.__setNumRunners()
 
     @pyqtSignature("")
     def on_deleteButton_clicked(self):
@@ -198,7 +205,7 @@ class BettyMain(QMainWindow, Ui_Betty_MainWindow):
             return
         self.model.removeRows(row)
         self.resizeColumns()
-        self.setNumRunners()
+        self.__setNumRunners()
 
     @pyqtSignature("QString")
     def on_nameEdit_textChanged(self):
@@ -218,13 +225,13 @@ class BettyMain(QMainWindow, Ui_Betty_MainWindow):
 
     @pyqtSignature("int")
     def on_milesSpinner_valueChanged(self):
-        self.model.distance = self.calculateDistance()
+        self.model.distance = self.__calculateDistance()
 
     @pyqtSignature("QString")
     def on_furlongCombo_activated(self):
-        self.model.distance = self.calculateDistance()
+        self.model.distance = self.__calculateDistance()
 
-    def calculateDistance(self):
+    def __calculateDistance(self):
         return int(self.milesSpinner.value() * 8
                    + self.furlongCombo.currentIndex())
 
@@ -246,33 +253,33 @@ class BettyMain(QMainWindow, Ui_Betty_MainWindow):
 
     @pyqtSignature("")
     def on_actionNew_triggered(self):
-        if not self.okToContinue():
+        if not self.__okToContinue():
             return
         self.model.newRace()
         self.reset()
 
     @pyqtSignature("")
     def on_actionSave_triggered(self):
-        self.fileSave()
+        self.__fileSave()
 
     @pyqtSignature("")
     def on_actionSave_As_triggered(self):
-        self.fileSaveAs()
+        self.__fileSaveAs()
 
     @pyqtSignature("")
     def on_actionOpen_triggered(self):
-        self.fileOpen()
+        self.__fileOpen()
 
     @pyqtSignature("")
     def on_actionAbout_triggered(self):
-        message = "%s v%s" % (appName, appVersion)
+        message = "%s v%s" % (APPNAME, APPVERSION)
         message += os.linesep
         message += "Copyright Mike Thomas 2010"
         QMessageBox.about(self, "About...", message)
 
     @pyqtSignature("")
     def on_actionDownload_triggered(self):
-        if not self.okToContinue():
+        if not self.__okToContinue():
             return
         dlg = raceSelector.raceSelector(self)
         if not dlg.exec_():
@@ -299,7 +306,7 @@ class BettyMain(QMainWindow, Ui_Betty_MainWindow):
                 setDefaultAdjustments(dlg.getAdjusts())
             self.reset()
 
-    def okToContinue(self):
+    def __okToContinue(self):
         if not self.model.dirty:
             return True
         reply = QMessageBox.question(self, "Betty - Unsaved Changes",
@@ -310,14 +317,14 @@ class BettyMain(QMainWindow, Ui_Betty_MainWindow):
         if reply == QMessageBox.Cancel:
             return False
         elif reply == QMessageBox.Yes:
-            return self.fileSave()
+            return self.__fileSave()
         return True
 
-    def fileSave(self, filename = None):
+    def __fileSave(self, filename = None):
         if filename is None:
             filename = self.model.filename
         if filename is None:
-            return self.fileSaveAs()
+            return self.__fileSaveAs()
         else:
             if not self.model.save(filename):
                 QMessageBox.warning(self, "File Error",
@@ -327,7 +334,7 @@ class BettyMain(QMainWindow, Ui_Betty_MainWindow):
             self.reset()
             return True
 
-    def fileSaveAs(self):
+    def __fileSaveAs(self):
         extensionName = "Betty files (%s)" % self.__formatExtension
         path = os.path.join(self.currentDir, "_".join([str(self.dateEdit.date().toString("yyyyMMdd")),
                                                        self.model.course,
@@ -339,12 +346,12 @@ class BettyMain(QMainWindow, Ui_Betty_MainWindow):
         if not filename.isEmpty():
             if not filename.contains("."):
                 filename += self.__formatExtension
-            return self.fileSave(filename)
+            return self.__fileSave(filename)
         else:
             return False
 
-    def fileOpen(self, filename = None):
-        if not self.okToContinue():
+    def __fileOpen(self):
+        if not self.__okToContinue():
             return
         extensionName = "Betty files (%s)" % self.__formatExtension
         filename = QFileDialog.getOpenFileName(self,
@@ -359,12 +366,12 @@ class BettyMain(QMainWindow, Ui_Betty_MainWindow):
                 QMessageBox.warning(self, "File Error",
                                     "Could not load %s" % filename)
 
-    def check_deleteButton(self):
+    def __check_deleteButton(self):
         enabled = self.model.rowCount() > 2
         self.deleteButton.setEnabled(enabled)
 
     def closeEvent(self, event):
-        if self.okToContinue():
+        if self.__okToContinue():
             settings = QSettings()
             settings.setValue("MainWindow/Size", QVariant(self.size()))
             settings.setValue("MainWindow/Position", QVariant(self.pos()))
@@ -390,7 +397,7 @@ if __name__ == "__main__":
     app = QApplication(sys.argv)
     app.setOrganizationName("Whatang Software")
     app.setOrganizationDomain("whatang.org")
-    app.setApplicationName(appName)
+    app.setApplicationName(APPNAME)
     main = BettyMain()
     main.show()
     app.exec_()

@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'C:\Users\Mike_2\Eclipse workspace\Betty\src\GUI\raceSelector.ui'
 #
-# Created: Sun Apr 04 19:41:17 2010
+# Created: Sun Aug 01 06:36:03 2010
 #      by: PyQt4 UI code generator 4.7
 #
 # WARNING! All changes made in this file will be lost!

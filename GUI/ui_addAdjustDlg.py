@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'C:\Users\Mike_2\Eclipse workspace\Betty\src\GUI\addAdjustDlg.ui'
 #
-# Created: Fri Feb 12 09:53:29 2010
+# Created: Sun Aug 01 06:36:00 2010
 #      by: PyQt4 UI code generator 4.7
 #
 # WARNING! All changes made in this file will be lost!

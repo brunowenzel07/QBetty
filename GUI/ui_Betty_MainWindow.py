@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'C:\Users\Mike_2\Eclipse workspace\Betty\src\GUI\Betty_MainWindow.ui'
 #
-# Created: Sun Apr 04 18:47:07 2010
+# Created: Mon Aug 02 18:45:29 2010
 #      by: PyQt4 UI code generator 4.7
 #
 # WARNING! All changes made in this file will be lost!
@@ -101,6 +101,7 @@ class Ui_Betty_MainWindow(object):
         self.label_3.setObjectName("label_3")
         self.horizontalLayout_2.addWidget(self.label_3)
         self.dateEdit = QtGui.QDateEdit(self.frame)
+        self.dateEdit.setCalendarPopup(True)
         self.dateEdit.setObjectName("dateEdit")
         self.horizontalLayout_2.addWidget(self.dateEdit)
         self.label_4 = QtGui.QLabel(self.frame)
