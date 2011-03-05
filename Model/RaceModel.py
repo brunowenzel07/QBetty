@@ -116,10 +116,10 @@ class RaceModel(QAbstractTableModel):
         column += self.__setColumnMap("round", column,
                                       xrange(0, len(self.rounds)))
 
-    def rowCount(self, index = QModelIndex()): #@UnusedVariable
+    def rowCount(self, index_ = QModelIndex()): #@UnusedVariable
         return len(self.race)
 
-    def columnCount(self, index = QModelIndex()): #@UnusedVariable
+    def columnCount(self, index_ = QModelIndex()): #@UnusedVariable
         return int(len(self.race.adjusts) +
                    (Horse.Horse.numRatings * 2) + 1 + len(self.rounds))
 
@@ -201,7 +201,7 @@ class RaceModel(QAbstractTableModel):
         return Qt.ItemFlags(QAbstractTableModel.flags(self, index) |
                             Qt.ItemIsEditable)
 
-    def setData(self, index, value, role = Qt.EditRole):
+    def setData(self, index, value, role_ = Qt.EditRole):
         if index.isValid() and 0 <= index.row() < len(self.race):
             horse = self.horseList[index.row()]
             column = index.column()
@@ -226,7 +226,7 @@ class RaceModel(QAbstractTableModel):
             return True
         return False
 
-    def insertRows(self, position, rows = 1, index = QModelIndex()):
+    def insertRows(self, position, rows = 1, index_ = QModelIndex()):
         self.beginInsertRows(QModelIndex(), position, position + rows - 1)
         for row in xrange(rows):
             self.race.insert(position + row)
@@ -235,7 +235,7 @@ class RaceModel(QAbstractTableModel):
         self.dirty = True
         return True
 
-    def removeRows(self, position, rows = 1, index = QModelIndex()):
+    def removeRows(self, position, rows = 1, index_ = QModelIndex()):
         self.beginRemoveRows(QModelIndex(), position, position + rows - 1)
         horses = [self.horseList[i] for i in xrange(position, position + rows)]
         for h in horses:

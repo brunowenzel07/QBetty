@@ -5,10 +5,11 @@ Created on 2 Feb 2010
 
 '''
 
-def numDecimals(x):
-    if x > 10:
+def numDecimals(odds):
+    if odds > 10:
         return 0
-    if x > 5: return 1
+    if odds > 5:
+        return 1
     return 2
 
 _fractionalOdds = [(10000, 1),
@@ -175,7 +176,7 @@ import bisect
 class OddsDisplayer(object):
     implemented = False
     @classmethod
-    def display(cls, prob):
+    def display(cls, prob_):
         return "---"
 
 
@@ -206,28 +207,28 @@ class BetfairOddsDisplay(OddsDisplayer):
             return "0.00"
         else:
             odds = (1 + ((1 - prob) / prob))
-            numDecimals = 0
+            numDecimalPlaces = 0
             if odds <= 2:
                 mult = 100
-                numDecimals = 2
+                numDecimalPlaces = 2
             elif odds <= 3:
                 mult = 50
-                numDecimals = 2
+                numDecimalPlaces = 2
             elif odds <= 4:
                 mult = 20
-                numDecimals = 2
+                numDecimalPlaces = 2
             elif odds <= 6:
                 mult = 10
-                numDecimals = 1
+                numDecimalPlaces = 1
             elif odds <= 10:
                 mult = 5
-                numDecimals = 1
+                numDecimalPlaces = 1
             elif odds <= 20:
                 mult = 2
-                numDecimals = 1
+                numDecimalPlaces = 1
             elif odds <= 30:
                 mult = 1
-                numDecimals = 0
+                numDecimalPlaces = 0
             elif odds <= 50:
                 mult = 0.5
             elif odds <= 100:
@@ -235,7 +236,7 @@ class BetfairOddsDisplay(OddsDisplayer):
             else:
                 mult = 0.1
             odds = int((odds * mult) + 0.5) / float(mult)
-            return "%0.*f" % (numDecimals, odds)
+            return "%0.*f" % (numDecimalPlaces, odds)
 
 class FractionalOddsDisplay(OddsDisplayer):
     implemented = True

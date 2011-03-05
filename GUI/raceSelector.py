@@ -20,7 +20,7 @@ class CachedDetails(object):
     thisMeeting = None
     selectedRace = None
 
-details = CachedDetails()
+_DETAILS = CachedDetails()
 
 def populateList(listWidget, contents):
     listWidget.clear()
@@ -39,62 +39,65 @@ class raceSelector(Ui_raceSelector, QDialog):
         Constructor
         '''
         super(raceSelector, self).__init__(parent)
-        if details.dateList is None:
+        if _DETAILS.dateList is None:
             QApplication.setOverrideCursor(Qt.WaitCursor)
-            details.dateList = Download.RPDownloader.getAvailableDates()
+            _DETAILS.dateList = Download.RPDownloader.getAvailableDates()
             QApplication.setOverrideCursor(Qt.ArrowCursor)
         self.setupUi(self)
         self.populateDates()
-        if details.selectedDate is not None:
+        if _DETAILS.selectedDate is not None:
             try:
-                index = details.dateList.index(details.selectedDate)
+                index = _DETAILS.dateList.index(_DETAILS.selectedDate)
             except ValueError:
                 return
             self.dateList.setCurrentRow(index)
-            if details.selectedMeeting is not None:
+            if _DETAILS.selectedMeeting is not None:
                 try:
-                    index = details.meetings.index(details.selectedMeeting)
+                    index = _DETAILS.meetings.index(_DETAILS.selectedMeeting)
                 except ValueError:
                     return
                 self.courseList.setCurrentRow(index)
+        self.race = None
         self.connect(self, SIGNAL("accepted()"), self.on_raceSelector_accepted)
 
     def populateDates(self):
-        populateList(self.dateList, details.dateList)
+        populateList(self.dateList, _DETAILS.dateList)
 
     def populateCourses(self):
-        if details.meetingSet.get(details.selectedDate) is None:
+        if _DETAILS.meetingSet.get(_DETAILS.selectedDate) is None:
             QApplication.setOverrideCursor(Qt.WaitCursor)
-            meetingHTML = Download.RPDownloader.getMeetingsHTML(details.selectedDate)
-            details.meetingSet[details.selectedDate] = Download.meetingsParser.parse(meetingHTML)
+            meetingHTML = Download.RPDownloader.getMeetingsHTML(_DETAILS.selectedDate)
+            _DETAILS.meetingSet[_DETAILS.selectedDate] = Download.meetingsParser.parse(meetingHTML)
             QApplication.setOverrideCursor(Qt.ArrowCursor)
-        details.meetings = details.meetingSet[details.selectedDate].keys()
-        details.meetings.sort()
-        populateList(self.courseList, details.meetings)
+        _DETAILS.meetings = _DETAILS.meetingSet[_DETAILS.selectedDate].keys()
+        _DETAILS.meetings.sort()
+        populateList(self.courseList, _DETAILS.meetings)
 
     def populateRaces(self):
-        details.thisMeeting = details.meetingSet[details.selectedDate][details.selectedMeeting]
-        details.times = details.thisMeeting.keys()
-        details.times.sort()
-        populateList(self.timeList, details.times)
+        _DETAILS.thisMeeting = _DETAILS.meetingSet[_DETAILS.selectedDate][_DETAILS.selectedMeeting]
+        _DETAILS.times = _DETAILS.thisMeeting.keys()
+        _DETAILS.times.sort()
+        populateList(self.timeList, _DETAILS.times)
 
     @pyqtSignature("")
     def on_dateList_itemSelectionChanged(self):
-        details.selectedDate = details.dateList[self.dateList.currentRow()]
+        _DETAILS.selectedDate = _DETAILS.dateList[self.dateList.currentRow()]
         self.populateCourses()
 
     @pyqtSignature("")
     def on_courseList_itemSelectionChanged(self):
-        details.selectedMeeting = details.meetings[self.courseList.currentRow()]
+        _DETAILS.selectedMeeting = _DETAILS.meetings[self.courseList.currentRow()]
         self.populateRaces()
 
     def on_raceSelector_accepted(self):
-        details.selectedRace = details.times[self.timeList.currentRow()]
-        raceInfo = details.thisMeeting[details.selectedRace]
+        _DETAILS.selectedRace = _DETAILS.times[self.timeList.currentRow()]
+        raceInfo = _DETAILS.thisMeeting[_DETAILS.selectedRace]
         QApplication.setOverrideCursor(Qt.WaitCursor)
-        raceInfo.download()
-        QApplication.setOverrideCursor(Qt.ArrowCursor)
-        self.race = raceInfo.race
+        try:
+            raceInfo.download()
+            self.race = raceInfo.race
+        finally:
+            QApplication.setOverrideCursor(Qt.ArrowCursor)
 
 if __name__ == "__main__":
     import sys
