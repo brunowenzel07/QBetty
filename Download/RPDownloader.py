@@ -34,9 +34,9 @@ class RPDownloader(object):
         return urlopen(address)
 
     def getRaceHTML(self, info):
-#        address = "%s%s" % (RPDownloader.BASE_ADDRESS, info.address)
-#        print "Getting race HTML from", info.address
-        return urlopen(info.address)
+        address = "%s%s" % (RPDownloader.BASE_ADDRESS, info.address)
+#        print "Getting race HTML from", info.address, address
+        return urlopen(address)
 
 class MockRPDownloader(object):
     def getAvailableDates(self):
