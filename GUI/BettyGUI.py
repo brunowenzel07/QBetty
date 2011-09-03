@@ -22,7 +22,7 @@ from Data import Horse
 import raceSelector
 
 APPNAME = "Betty"
-APPVERSION = "0.6"
+APPVERSION = "0.7"
 
 def setCombo(combo, itemText):
     itemList = [unicode(combo.itemText(i)) for
