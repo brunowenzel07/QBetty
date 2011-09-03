@@ -38,8 +38,11 @@ class RaceParser(object):
             race.time = "%02d:%02d" % (hours, minutes)
         # Get race name
         raceDetails = soup.find("p", {"class":"raceInfo"})
-        details = raceDetails.find("strong").contents[0]
-        race.name = details.strip()
+        details = raceDetails.findAll("strong")
+        for element in details:
+            if element.contents:
+                race.name = element.contents[0].strip()
+                break
         # Get race distance
         distanceNode = raceDetails.find(text = re.compile(r"(\d+m(\d+f)?)|(\d+f)"))
         if distanceNode:
@@ -64,32 +67,34 @@ class RaceParser(object):
                 prize = re.sub(",", "", prize)
                 race.prize = int(prize)
         # Get horse data and date
-        horseDataFinder = re.compile(r"^\s*horsesData\s*=")
-        dateFinder = re.compile(r'var jsRaceDate="(\d{4}-\d{2}-\d{2})"')
-        horseData = "{}"
+        cardInit = re.compile(r'www\.horses\.card\.init\((.*)\);\}\);')
+        horseData = None
         for line in lines:
-            if horseDataFinder.search(line):
-                horseData = re.sub(".*?({.*}).*", r"\1", line)
-            elif dateFinder.search(line):
-                race.date = dateFinder.search(line).group(1)
+            if cardInit.search(line):
+                match = cardInit.search(line)
+                data = match.group(1)
+                data = json.loads(data)
+                horseData = data['horsesData']
+                race.date = data['raceDate']
                 race.date = re.search("(\d{4})-(\d{2})-(\d{2})", race.date)
                 race.date = "%s/%s/%s" % (race.date.group(3), race.date.group(2),
                                           race.date.group(1))
-        horseData = json.loads(horseData)
+                break
         horseData = dict([(int(horseData[h]["no"]), horseData[h]) for h in horseData])
         horseNumbers = horseData.keys()
         horseNumbers.sort()
         for horseId in horseNumbers:
             horseHash = horseData[horseId]
             horse = race.addHorse()
-            horse.name = horseHash["horseFull"]
-            horse.name = horse.name.replace(r"\'", "'")
+            horse.name = BeautifulSoup(horseHash["horse"],
+                                       convertEntities = BeautifulSoup.HTML_ENTITIES).contents[0]
+            horse.name = horse.name.title()
             try:
-                horse.ts = int(horseHash["ts"])
+                horse.ts = int(horseHash["topspeed"])
             except ValueError:
                 horse.ts = 0
             try:
-                horse.rpr = int(horseHash["rpr"])
+                horse.rpr = int(horseHash["rprating"])
             except ValueError:
                 horse.rpr = 0
         return race
@@ -101,11 +106,13 @@ def parse(raceHandle):
 
 if __name__ == "__main__":
     import glob
-    for raceFile in glob.glob("testdata/race_*.html"):
+    for raceFile in glob.glob("testdata/race_53*.html"):
         print raceFile
         handle = open(raceFile)
         try:
             race = parser.parse(handle)
+            for horse in race:
+                print horse
         except NoRaceDataError:
             print "No valid Race Data"
             continue
