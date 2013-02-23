@@ -105,7 +105,7 @@ class Race(object):
         doc = self.getXML()
         try:
             target.write(doc.toxml(encoding = "utf-8").decode("utf-8"))
-        except:
+        except: #IGNORE:W0702
             return False
         return True
 
@@ -117,7 +117,7 @@ class Race(object):
         xmlString = unicode("".join(target.readlines()))
         try:
             doc = xml.dom.minidom.parseString(xmlString.encode("utf-8"))
-        except:
+        except: #IGNORE:W0702
             return False
         top = doc.documentElement
         for tag, tagType in self.__tags:

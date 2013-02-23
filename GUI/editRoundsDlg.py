@@ -50,10 +50,13 @@ class editRoundsDlg(Ui_roundsDlg, QDialog, upDownList):
         return [int(self.roundListWidget.item(row).text()) for row in range(0, self.roundListWidget.count())]
 
 
-if __name__ == "__main__":
+def main():
     racemodel = RaceModel.RaceModel()
     import sys
-    app = QApplication(sys.argv)
+    app_ = QApplication(sys.argv)
     dlg = editRoundsDlg(racemodel)
     dlg.exec_()
     print dlg.getRounds()
+
+if __name__ == "__main__":
+    main()

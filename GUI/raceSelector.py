@@ -99,9 +99,13 @@ class raceSelector(Ui_raceSelector, QDialog):
         finally:
             QApplication.setOverrideCursor(Qt.ArrowCursor)
 
-if __name__ == "__main__":
+
+def main():
     import sys
-    app = QApplication(sys.argv)
+    app_ = QApplication(sys.argv)
     Download.RPDownloader.setTestMode()
     dlg = raceSelector()
     dlg.exec_()
+
+if __name__ == "__main__":
+    main()

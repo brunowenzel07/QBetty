@@ -9,7 +9,7 @@ import re
 from urllib import urlopen
 
 soup = BeautifulSoup(open("testdata/meetings.html"))
-raceFinder = re.compile("/horses2/cards/card.sd\?race_id=(\d+)")
+raceFinder = re.compile(r"/horses2/cards/card.sd\?race_id=(\d+)")
 racesDone = set()
 for link in soup.findAll("a", href = raceFinder):
     raceId = raceFinder.search(link["href"]).group(1)

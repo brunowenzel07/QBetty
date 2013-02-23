@@ -14,7 +14,7 @@ testDataDir = os.path.join(os.path.dirname(__file__), "testdata")
 def parseRaceDates(handle):
     lines = list(handle)
     soup = BeautifulSoup("".join(lines), convertEntities = BeautifulSoup.HTML_ENTITIES)
-    dateFinder = re.compile("cards/home.sd\?r_date=(\d+-\d+-\d+)$")
+    dateFinder = re.compile(r"cards/home.sd\?r_date=(\d+-\d+-\d+)$")
     raceDates = set([dateFinder.search(x['href']).group(1) for x in soup.findAll("a", href = dateFinder)])
     raceDates = list(raceDates)
     raceDates.sort()
@@ -77,7 +77,7 @@ def getMeetingsHTML(date):
     return rpdownloader.getMeetingsHTML(date)
 
 def setTestMode():
-    global rpdownloader
+    global rpdownloader #IGNORE:W0603
     rpdownloader = MockRPDownloader()
 
 rpdownloader = RPDownloader()

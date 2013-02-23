@@ -38,6 +38,7 @@ class RaceModel(QAbstractTableModel):
         '''
         super(RaceModel, self).__init__()
         self.filename = None
+        self.__dirty = None
         self.dirty = False
         self.oddsDisplay = Chance.DecimalOddsDisplay
         self.race = None

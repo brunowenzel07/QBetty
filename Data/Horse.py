@@ -12,7 +12,7 @@ def cmpHorseByName(horseA, horseB):
     na = unicode(horseA.name).lower()
     nb = unicode(horseB.name).lower()
     if na < nb:
-        return - 1
+        return -1
     elif na == nb:
         return 1
     else:
@@ -20,7 +20,7 @@ def cmpHorseByName(horseA, horseB):
 
 def cmpHorseByOdds(horseA, horseB):
     if horseA.prob > horseB.prob:
-        return - 1
+        return -1
     elif horseA.prob == horseB.prob:
         return 0
     else:

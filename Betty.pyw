@@ -4,7 +4,7 @@ Created on 13 Feb 2010
 @author: Mike Thomas
 '''
 
-if __name__ == '__main__':
+def mainapp():
     import sys
     from PyQt4.QtGui import QApplication, QIcon, QPixmap
     import GUI.BettyGUI
@@ -24,3 +24,6 @@ if __name__ == '__main__':
     main = GUI.BettyGUI.BettyMain()
     main.show()
     app.exec_()
+
+if __name__ == '__main__':
+    mainapp()

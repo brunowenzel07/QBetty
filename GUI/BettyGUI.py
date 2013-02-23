@@ -45,6 +45,11 @@ class BettyMain(QMainWindow, Ui_Betty_MainWindow):
         Constructor
         '''
         super(BettyMain, self).__init__(parent)
+        self.recentFiles = None
+        self.model = None
+        self.__oddsDisplay = None
+        self.__sortOrder = None
+        self.currentDir = None
         state, size, pos = self.__readSettings()
         self.setupUi(self)
         self.__setupCourseCombo()
@@ -391,7 +396,7 @@ class BettyMain(QMainWindow, Ui_Betty_MainWindow):
         else:
             event.ignore()
 
-if __name__ == "__main__":
+def mainapp():
     import Download
     Download.RPDownloader.setTestMode()
     app = QApplication(sys.argv)
@@ -401,3 +406,7 @@ if __name__ == "__main__":
     main = BettyMain()
     main.show()
     app.exec_()
+
+
+if __name__ == "__main__":
+    mainapp()

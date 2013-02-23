@@ -98,7 +98,8 @@ class Adjustments(object):
         for node in listnode.getElementsByTagName("adjust"):
             if node.parentNode != listnode: continue
             try: name = unicode(node.firstChild.nodeValue)
-            except: continue
+            except: #IGNORE:W0702
+                continue
             self.addAdjustment(name)
 
     def getHorseXMLTree(self, doc, horse):
@@ -118,7 +119,8 @@ class Adjustments(object):
         for listnode in horsenode.getElementsByTagName("adjustList"):
             for node in listnode.getElementsByTagName("adjust"):
                 try: value = int(node.firstChild.nodeValue)
-                except: continue
+                except: #IGNORE:W0702
+                    continue
                 adjust = unicode(node.getAttribute("name"))
                 self.setAdjust(adjust, horse, value)
 

@@ -24,13 +24,13 @@ class RaceParser(object):
             raise NoRaceDataError()
         race.course = headline.contents[-1].strip()
         race.course = race.course.lower().capitalize()
-        if re.search(" \(.*\)", race.course):
-            race.course = re.sub(" \(.*\)", "", race.course)
+        if re.search(r" \(.*\)", race.course):
+            race.course = re.sub(r" \(.*\)", "", race.course)
         # Get race time
         raceDetails = headline.find(attrs = {"class":"navRace"})
         race.time = raceDetails.find(text = re.compile(r"\d+:\d+"))
         race.time = race.time.strip()
-        timeMatch = re.search("(\d+):(\d+)", race.time)
+        timeMatch = re.search(r"(\d+):(\d+)", race.time)
         if timeMatch:
             hours = int(timeMatch.group(1))
             minutes = int(timeMatch.group(2))
@@ -76,7 +76,7 @@ class RaceParser(object):
                 data = json.loads(data)
                 horseData = data['horsesData']
                 race.date = data['raceDate']
-                race.date = re.search("(\d{4})-(\d{2})-(\d{2})", race.date)
+                race.date = re.search(r"(\d{4})-(\d{2})-(\d{2})", race.date)
                 race.date = "%s/%s/%s" % (race.date.group(3), race.date.group(2),
                                           race.date.group(1))
                 break
@@ -104,7 +104,7 @@ parser = RaceParser()
 def parse(raceHandle):
     return parser.parse(raceHandle)
 
-if __name__ == "__main__":
+def testmain():
     import glob
     for raceFile in glob.glob("testdata/race_53*.html"):
         print raceFile
@@ -121,3 +121,7 @@ if __name__ == "__main__":
         print race
         #for raceHorse in race:
         #    print raceHorse
+
+
+if __name__ == "__main__":
+    testmain()

@@ -49,11 +49,13 @@ class editAdjustDlg(Ui_adjustDlg, QDialog, upDownList):
     def makeDefault(self):
         return self.checkBox.isChecked()
 
-
-if __name__ == "__main__":
+def main():
     import sys
-    app = QApplication(sys.argv)
+    app_ = QApplication(sys.argv)
     racemodel = RaceModel.RaceModel()
     dlg = editAdjustDlg(racemodel)
     dlg.exec_()
     print dlg.getAdjusts()
+
+if __name__ == "__main__":
+    main()
