@@ -5,8 +5,9 @@ Created on 4 Apr 2010
 
 '''
 
-from PyQt4.QtGui import QDialog, QApplication
+from PyQt4.QtGui import QDialog, QApplication, QMessageBox
 from PyQt4.QtCore import Qt, pyqtSignature, QString, SIGNAL
+import traceback
 from ui_raceSelector import Ui_raceSelector
 import Download
 
@@ -96,6 +97,9 @@ class raceSelector(Ui_raceSelector, QDialog):
         try:
             raceInfo.download()
             self.race = raceInfo.race
+        except Exception, exc:
+            QMessageBox.warning(self, "Error!", traceback.format_exc())
+            raise
         finally:
             QApplication.setOverrideCursor(Qt.ArrowCursor)
 
