@@ -85,7 +85,7 @@ class RaceParser(object):
         horseNumbers.sort()
         for horseId in horseNumbers:
             horseHash = horseData[horseId]
-            horse = race.addHorse(id = horseId)
+            horse = race.addHorse(horseId = horseId)
             horse.name = BeautifulSoup(horseHash["horse"],
                                        convertEntities = BeautifulSoup.HTML_ENTITIES).contents[0]
             horse.name = horse.name.title()

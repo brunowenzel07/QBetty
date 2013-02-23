@@ -47,8 +47,8 @@ class Race(object):
                                          self.name, self.distance,
                                          self.raceClass, self.prize)
 
-    def addHorse(self, horse = None, id = None):
-        if horse is None: horse = Horse(horseId = id)
+    def addHorse(self, horse = None, horseId = None):
+        if horse is None: horse = Horse(horseId = horseId)
         self.horses.append(horse)
         return horse
 
