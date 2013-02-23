@@ -56,13 +56,16 @@ class MeetingsParser(object):
             thisMeeting = meetings.addMeeting(courseName.capitalize())
             for raceTableNode in meetingHead.findAll("table", {"class":"cardsGrid"}):
                 for tableRow in raceTableNode.findAll("tr"):
-                    address = tableRow.find("a")["href"]
-                    raceId = idFinder.search(address).group(1)
-                    timeNode = tableRow.find("th", {"class":"rTime"}).find("a")
-                    time = timeNode.contents[0].strip()
-                    nameNode = tableRow.find("td", {"class":None}).find("a")
-                    name = nameNode.contents[0].strip()
-                    thisMeeting.addRace(time, name, address, raceId)
+                    try:
+                        address = tableRow.find("a")["href"]
+                        raceId = idFinder.search(address).group(1)
+                        timeNode = tableRow.find("th", {"class":"rTime"}).find("a")
+                        time = timeNode.contents[0].strip()
+                        nameNode = tableRow.find("td", {"class":None}).find("a")
+                        name = nameNode.contents[0].strip()
+                        thisMeeting.addRace(time, name, address, raceId)
+                    except (TypeError, AttributeError):
+                        continue
         return meetings
 
 __parser = MeetingsParser()

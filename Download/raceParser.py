@@ -22,7 +22,7 @@ class RaceParser(object):
         headline = soup.find("h1", {"class":"cardHeadline"})
         if not headline:
             raise NoRaceDataError()
-        race.course = headline.contents[-1].strip()
+        race.course = headline.find("span", {"class":"placeRace"}).contents[0].strip()
         race.course = race.course.lower().capitalize()
         if re.search(r" \(.*\)", race.course):
             race.course = re.sub(r" \(.*\)", "", race.course)
@@ -37,7 +37,7 @@ class RaceParser(object):
             if hours < 12: hours += 12
             race.time = "%02d:%02d" % (hours, minutes)
         # Get race name
-        raceDetails = soup.find("p", {"class":"raceInfo"})
+        raceDetails = soup.find("div", {"class":"raceInfo clearfix"})
         details = raceDetails.findAll("strong")
         for element in details:
             if element.contents:
@@ -80,21 +80,25 @@ class RaceParser(object):
                 race.date = "%s/%s/%s" % (race.date.group(3), race.date.group(2),
                                           race.date.group(1))
                 break
-        horseData = dict([(int(horseData[h]["no"]), horseData[h]) for h in horseData])
+        horseData = dict([(int(h[1:]), horseData[h]) for h in horseData])
         horseNumbers = horseData.keys()
         horseNumbers.sort()
         for horseId in horseNumbers:
             horseHash = horseData[horseId]
-            horse = race.addHorse()
+            horse = race.addHorse(id = horseId)
             horse.name = BeautifulSoup(horseHash["horse"],
                                        convertEntities = BeautifulSoup.HTML_ENTITIES).contents[0]
             horse.name = horse.name.title()
             try:
                 horse.ts = int(horseHash["topspeed"])
+                if horse.ts == -1:
+                    horse.ts = 0
             except ValueError:
                 horse.ts = 0
             try:
                 horse.rpr = int(horseHash["rprating"])
+                if horse.rpr == -1:
+                    horse.rpr = 0
             except ValueError:
                 horse.rpr = 0
         return race
@@ -104,9 +108,10 @@ parser = RaceParser()
 def parse(raceHandle):
     return parser.parse(raceHandle)
 
+
 def testmain():
     import glob
-    for raceFile in glob.glob("testdata/race_53*.html"):
+    for raceFile in glob.glob("testdata/race_57*.html"):
         print raceFile
         handle = open(raceFile)
         try:
