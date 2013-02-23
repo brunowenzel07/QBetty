@@ -58,6 +58,7 @@ class Horse(object):
 
     def __str__(self):
         ret = str(self.name)
+        ret += ',%d' % self.id
         for rname in self.__ratingMap:
             ret += ",%d" % self.__getattribute__(rname)
         return ret
